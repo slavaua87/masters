@@ -1,0 +1,35 @@
+
+\documentclass[12pt, a4paper]{article}
+
+\author{Slava Nikitin}
+\title{Master's Notebook}
+%\date{\today}
+%\linespread{1.6}
+
+\begin{document}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{14/01/2015}
+Results for $RT$ preprocessing with chance performance cutoff for the fast and 3 sds for the slow responses:
+\begin{enumerate}
+\item Accuracy of responses in 150 - 200 window is  0.55 and in 200 - 250 window it is 0.62. The overall accuracy for RTs below 200 is 0.51. The lower cutoff results in removing 123 observations.
+
+\item For subject ``jf'' the accuracy in 200 - 250 is 0.63, in 150 - 200 is 0.46 and below 200 is 0.43. Throwing out 51 if cut below 200.
+
+\item For subject ``kr'' the accuracy in 200 - 250 is 0.61, in 150 - 200 is 0.63 and below 200 is 0.57, below 190 is 0.51. Cutting below 190 results in 45 and below 200 in 68.	
+
+For subject ``nh'' the accuracy in 200 - 250 is 0.61, in 150 - 200 is 0.5 and below 200 is 0.5. 4 observations below 200.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{15/01/2015}
+I can use sample path points to test accuracy of the integration used for predictions of rt distributions.
+
+\section{16/01/2015}
+It will be faster if I only simulate \delta and \beta, but this undermines the test of integration accuracy for the $RT$ distribution. I could integrate just the decision time density as a test.
+
+\section{17/01/2015}
+Combining data.frames for different parameters required custom functions. Maybe if dplyr was understood then data organization would be different and workable.
+
+
+\end{document}
