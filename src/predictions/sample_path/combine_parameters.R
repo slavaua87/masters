@@ -19,14 +19,14 @@ combine_wiener_copula <- function(nu_wiener, rho, omega) {
   n_corrs <- dim(rho)[1]
   n_wiener <- dim(nu_wiener)[1]
   n_combos <- n_wiener * n_corrs
-  all_params <- cbind(matrix(rep(t(nu_wiener), n_corrs), 
+  all_params <- cbind(matrix(rep(t(nu_wiener), times = n_corrs), 
                              ncol = 7, nrow = n_combos, byrow = TRUE),
                       as.matrix(rho[rep(seq_len(n_corrs), each = n_wiener), ]),
                       rep(omega, times = n_combos))
   return(all_params)
 }
 
-simul_conditions <- function(nu, wiener, rho, omega) {
+combine_param <- function(nu, wiener, rho, omega) {
   # Wraps both combine functions and cleans up the output
   # Takes and outputs data.frames
   nu_wiener <- combine_nu_wiener(nu = nu, wiener = wiener)

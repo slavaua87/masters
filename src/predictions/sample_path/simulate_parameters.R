@@ -3,17 +3,17 @@
 ### Generates trial parameters from the joint density of drift and bias
 library(copula)
 
-simul_copula <- function(smpl.size, params, model) {
+simul_copula <- function(smpl_size, params, model) {
   # Draws a sample from a specified copula
   # Takes sample size, parameter values and model type to return a matrix
   # Params order: alpha, nu, eta, lambda, gamma, chi, phi, 3 rhos, omega
-  if (model == 'indep') {
-    cop_smpl <- matrix(runif(2 * smpl.size), nrow = smpl.size, ncol = 2)
-    return(smpl)
+  if (model == 'independent') {
+    cop_smpl <- matrix(runif(2 * smpl_size), nrow = smpl_size, ncol = 2)
+    return(cop_smpl)
   }
   cop_pdf <- ellipCopula(model, param = params[, "rho_db"], 
                          dim = 2, dispstr = 'un', df = params[, "omega"])
-  cop_smpl <- rCopula(n = smpl.size, copula = cop_pdf)
+  cop_smpl <- rCopula(n = smpl_size, copula = cop_pdf)
   return(cop_smpl)
 }
 
@@ -34,11 +34,10 @@ calc_param <- function(cop_smpl, params) {
   return(param_smpl)
 }
 
-smpl_param <- function(smpl.size, params, model, seed) {
+smpl_param <- function(params, smpl_size, model) {
   # Wraps simulation and transformation of copula draws to give parameter sample
   # Takes a scalar, vector, string, scalar to output a data frame
-  set.seed(seed)
-  cop_smpl <- simul_copula(smpl.size = smpl.size, params = params, model = model)
+  cop_smpl <- simul_copula(smpl_size = smpl_size, params = params, model = model)
   param_smpl <- calc_param(cop_smpl = cop_smpl, params = params)
   return(as.data.frame(param_smpl))
 }

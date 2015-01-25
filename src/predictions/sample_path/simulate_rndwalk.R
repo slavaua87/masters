@@ -1,55 +1,46 @@
 
-# Random walk simulation of a bounded Wiener process
-# Takes process parameters and number of paths to return a list of sample paths
+library(compiler)
 
-rand_walk = function(trial = 10, v = .01, s = 1, z = .75, a = 1.3,
-                     ter = .2, lb = 0, tau = .0001) {
-  
-  # Container for data
-  results = matrix(0,trial,2)
-  
-  # Step size
-  delta = s*sqrt(tau)
-  
-  # Probability of moving up
-  p.up = .5*(1+v*sqrt(tau)/s)
-  if(p.up > 1) p.up = 1
-  if(p.up < 0) p.up = 0
-  
-  # Sampling mechanism
-  for (i in 1:trial) {
-    
-    # Initial position and time
-    position = z
-    time = 0
-    
-    # Simulation of a random walk
-    while(position < a & position > lb) {
-      
-      # Make a move
-      if(rbinom(1,1,p.up) == 1) position = position + delta
-      else position = position - delta
-      # Update time
-      time = time + tau      
-    }
-    
-    # Add data to the container    
-    if(position >= a) results[i,] = c(1,time)
-    else results[i,] = c(0,time)
-    
+rndwalk <- function(smpl_size = 1, delta = .01, sigma = 1, beta = .75, 
+                    alpha = 1.3, low_bound = 0, time_unit = .0001) {
+  # Random walk simulation of a bounded Wiener process
+  # Takes scalar process parameters, number of paths to give a list of sample paths
+  delta <- delta * sigma
+  alpha <- alpha * sigma
+  path_smpl <- vector(mode = "list", length = smpl_size)
+  state_unit <- sigma * sqrt(time_unit)
+  prob.up <- .5 * (1 + delta * sqrt(time_unit) / sigma)
+  if (prob.up > 1) prob.up <- 1
+  if (prob.up < 0) prob.up <- 0
+  for (draw in seq_len(smpl_size)) {
+    path <- vector(mode = "double", length = 1e4)
+    path[1] <- position <- beta * alpha
+    timer <- 0
+    counter <- 2
+    while (position < alpha & position > low_bound) {    
+      if (rbinom(1, 1, prob.up) == 1) {
+        position <- position + state_unit
+        path[counter] <- position
+      }
+      else {
+        position <- position - state_unit
+        path[counter] <- position
+      } 
+      timer <- timer + time_unit
+      counter <- counter + 1
+    }    
+    path_smpl[[draw]] <- path[path != 0]
   }
-  results[,2] <- results[,2] + ter
-  # Output data
-  return(results)
+  return(path_smpl)
 }
 
+# Compiles just-in-time
+rndwalk_cmp <- cmpfun(f = rndwalk)
+# Vectorizes with respect to variable parameters
+rndwalk_vec <- Vectorize(FUN = rndwalk_cmp, 
+                         vectorize.args = list("delta", "beta", "alpha"))
 
-# Vectorize the simulation
-rw.vectorized <- Vectorize(FUN = rw.basic,
-                           vectorize.args = list('v','z','a','ter'))
 
-dat <- list(a = c(3, 5), b = 4)
-do.call(merge, list(x = dat, by = 0, all = TRUE)) 
 
-x <- c(rnorm(10), rep(NA, 10))
+
 

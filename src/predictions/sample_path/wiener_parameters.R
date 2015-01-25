@@ -1,5 +1,5 @@
 
-### Stores and generates parameters used for predictions
+### Stores and generates parameters used for predictions in data.frames
 # weibull psychometric model
 weibull_param <- data.frame(lower = c(-.352, -.565), upper = c(.329, .511),
                             scale = c(.526, .521), shape = c(4.413, 5.227),
@@ -10,7 +10,7 @@ bright <- data.frame(prop = c(.188, .25, .313, .375, .438, .5,
                               .563, .625, .688, .750, .813))
 
 # drift rate (reflects effect of s/a and brightness)
-source("src/predictions/sample_path/weibull.R")
+source("src/predictions/sample_path/calculate_weibull.R")
 nu <- as.data.frame(t(data.frame(
                    acc = as.vector(weibull(bright, weibull_param["acc", "lower"],
                                  weibull_param["acc", "upper"], 

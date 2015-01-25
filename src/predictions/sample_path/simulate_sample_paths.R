@@ -1,61 +1,34 @@
 
-### Prediction simulator
-Simul.Pred <- function(theta, n, omega, a, b, model, tau) {
-  # theta order: alpha, nu, eta, lambda, gamma, chi, phi, rhos
-  # Container
-  Preds <- matrix(0, n, 2)
-  # Obtain copula points
-  Pnts.cop <- Simul.Cop(n, theta, omega, model)
-  # Map copula points into parameter values
-  Params <- Map.Cop(Pnts.cop, theta, a, b)
-  # Preds order: responses, response times
-  # Simulate predictions
-  Preds <- rw.vectorized(1, Params[, 2], .1, Params[, 3] * Params[1, 1],
-                         Params[1, 1], Params[, 4], 0, tau)
-  return(t(Preds))
+simul_paths <- function(model, smpl_size, seed = 2132326000,
+                        sigma = 1, time_unit = 1e-4, cores = 1) {
+  # Simulates sample paths in parallel for different copula models 
+  # Takes a model string, simulation scalars and returns a list of lists
+  library(package = "doParallel")
+  library(package = "doRNG")
+  source("src/predictions/sample_path/wiener_parameters.R")
+  source("src/predictions/sample_path/combine_parameters.R")
+  source("src/predictions/sample_path/simulate_parameters.R")
+  source("src/predictions/sample_path/simulate_rndwalk.R")
+  
+  writeLines(c(""), "src/predictions/sample_path/progress_log.txt")
+  
+  ind_param <- combine_param(nu = nu, wiener = wiener,
+                             rho = rho, omega = omega)
+  set.seed(seed)
+  registerDoParallel(cores = cores)
+  results <- foreach(params = iter(obj = ind_param,
+                                   by = 'row')) %dorng% {
+             cat(paste(1, "\n"), file = "progress_log.txt", append = TRUE)
+             trial_param <- smpl_param(params = params,
+                                       smpl_size = smpl_size,
+                                       model = model)
+             rndwalk_vec(smpl_size = 1, 
+                         delta = trial_param$delta, 
+                         sigma = sigma, trial_param$beta, 
+                         trial_param$alpha,
+                         low_bound = 0, time_unit = time_unit)
+  }
+  file.remove("src/predictions/sample_path/progress_log.txt")
+  return(results)
 }
-
-############## Prediction results
-
-m <- dim(Theta.a)[1]
-n <- 10000
-omega <- 5
-a <- .2
-b <- 1
-model <- c('normal', 't', 'ind')
-tau <- 1e-4
-### Run the simulation
-# Normal
-Pred.n <- array(0, dim = c(n, 2, m))
-prog.bar <- txtProgressBar(min = 0, max = m, style = 3)
-for(i in 1:m) {
-  Pred.n[, , i] <- Simul.Pred(Theta.a[i, ], n, omega, a, b, model[1], tau)
-  setTxtProgressBar(pb = prog.bar, value = i)
-}
-save(Pred.n, file = 'Predictions_normal.RData')
-# t
-Pred.t <- array(0, dim = c(n, 2, m))
-prog.bar <- txtProgressBar(min = 0, max = m, style = 3)
-for(i in 1:m) {
-  Pred.t[, , i] <- Simul.Pred(Theta.a[i, ], n, omega, a, b, model[2], tau)         
-  setTxtProgressBar(pb = prog.bar, value = i)
-}
-save(Pred.t, file = 'Predictions_t.RData')
-# Independent
-#Pred.i <- array(0, dim = c(n, 2, m))
-cl <- makeCluster(2)
-registerDoParallel(cl)
-Pred.i <- array(as.vector(
-  foreach(param = iter(Theta.a, by = 'row'), 
-          .multicombine = T, 
-          .combine = cbind,
-          .packages = c('copula', 'tmvtnorm')) %dopar% {
-            Simul.Pred(param, n, omega, a, b, model[3], tau)}),
-  dim = c(n, 2, m))
-stopCluster(cl)
-
-save(Pred.i, file = 'Predictions_independent.RData')
-
-
-
 

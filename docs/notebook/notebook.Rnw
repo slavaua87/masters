@@ -31,5 +31,10 @@ It will be faster if I only simulate \delta and \beta, but this undermines the t
 \section{17/01/2015}
 Combining data.frames for different parameters required custom functions. Maybe if dplyr was understood then data organization would be different and workable.
 
+\section{22/01/2015}
+Simulating sample paths may create RAM issues if not saved intermediately to disk. Such operation requires ``Big Data'' libraries like ff or bigmemory. 
+
+\section{23/01/2015}
+Need to set up SSH connection to Giverny to avoid laptop destruction.
 
 \end{document}
