@@ -1,8 +1,9 @@
 
 simul_paths <- function(model, smpl_size, seed = 2132326000,
-                        sigma = 1, time_unit = 1e-4, cores = 1) {
+                        sigma = 1, time_unit = 1e-3, cores = 1) {
   # Simulates sample paths in parallel for different copula models 
-  # Takes a model string, simulation scalars and returns a list of lists
+  # Takes a model string, simulation parameter numerical scalars and 
+  # returns a list of lists of numeric vectors
   library(package = "doParallel")
   library(package = "doRNG")
   source("src/predictions/sample_path/wiener_parameters.R")
@@ -10,7 +11,9 @@ simul_paths <- function(model, smpl_size, seed = 2132326000,
   source("src/predictions/sample_path/simulate_parameters.R")
   source("src/predictions/sample_path/simulate_rndwalk.R")
   
-  writeLines(c(""), "src/predictions/sample_path/progress_log.txt")
+  # Maintains progress log during the simulation
+  name <- paste0("results/sample_path/progress-log-", Sys.time(), ".txt")
+  writeLines(text = "", con = name)
   
   ind_param <- combine_param(nu = nu, wiener = wiener,
                              rho = rho, omega = omega)
@@ -18,7 +21,7 @@ simul_paths <- function(model, smpl_size, seed = 2132326000,
   registerDoParallel(cores = cores)
   results <- foreach(params = iter(obj = ind_param,
                                    by = 'row')) %dorng% {
-             cat(paste(1, "\n"), file = "progress_log.txt", append = TRUE)
+             cat(paste(1, "\n"), file = name, append = TRUE)
              trial_param <- smpl_param(params = params,
                                        smpl_size = smpl_size,
                                        model = model)
@@ -28,7 +31,7 @@ simul_paths <- function(model, smpl_size, seed = 2132326000,
                          trial_param$alpha,
                          low_bound = 0, time_unit = time_unit)
   }
-  file.remove("src/predictions/sample_path/progress_log.txt")
+  file.remove(name)
   return(results)
 }
 

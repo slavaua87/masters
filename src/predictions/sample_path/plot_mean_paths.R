@@ -1,2 +1,0 @@
-
-library(package = "ggplot2")
