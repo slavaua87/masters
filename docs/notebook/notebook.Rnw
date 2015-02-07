@@ -37,4 +37,35 @@ Simulating sample paths may create RAM issues if not saved intermediately to dis
 \section{23/01/2015}
 Need to set up SSH connection to Giverny to avoid laptop destruction.
 
+\section{25/01/2015}
+Started using git branching for each piece of the project. Gonna practice branching-merging with time series plots. Also, data.frame is proving to be ubiqutois and may need to reshape my list of means into long data.frames to pass to ggplot. 
+
+\section{26/01/2015}
+Used reshape2 to melt lists into data frames. Learned dplyr - very useful. May need to produce graphs on giverny given the memory limitations. Layout of samples paths is not clear yet - 11 look better than 22 per plot.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}

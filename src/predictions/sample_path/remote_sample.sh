@@ -1,12 +1,6 @@
 #!bin/bash
 
-echo Connecting
-ssh vyacheslav@giverny <<EOF
-
-pwd
-
-echo Initiate R script
-Rscript sample_path_script.R
-
-EOF
-
+ssh giverny "
+  cd ~/Masters/src/predictions/sample_path
+  nohup Rscript --vanilla sample_path_script.R > /dev/null 2>&1 &
+"
