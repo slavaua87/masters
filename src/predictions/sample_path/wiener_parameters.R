@@ -6,8 +6,7 @@ weibull_param <- data.frame(lower = c(-.352, -.565), upper = c(.329, .511),
                             row.names = c("acc", "spd"))
 
 # brightness covariate
-bright <- data.frame(prop = c(.188, .25, .313, .375, .438, .5, 
-                              .563, .625, .688, .750, .813))
+bright <- data.frame(prop = c(.5, .563, .625, .688, .750, .813))
 
 # drift rate (reflects effect of s/a and brightness)
 source("src/predictions/sample_path/calculate_weibull.R")
@@ -20,7 +19,7 @@ nu <- as.data.frame(t(data.frame(
                                  weibull_param["spd", "upper"],
                                  weibull_param["spd", "scale"], 
                                  weibull_param["spd", "shape"])))))
-colnames(nu) <- paste("prop", as.character(1:11), sep = "")
+colnames(nu) <- paste("prop", as.character(1:6), sep = "")
 
 # wiener process (reflects effect of s/a)
 wiener <- data.frame(alpha = c(.221, .05), eta = c(.127, .127),

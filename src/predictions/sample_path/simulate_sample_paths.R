@@ -4,6 +4,8 @@ simul_paths <- function(model, smpl_size, seed = 2132326000,
   # Simulates sample paths in parallel for different copula models 
   # Takes a model string, simulation parameter numerical scalars and 
   # returns a list of lists of numeric vectors
+  library(package = "dplyr")
+  library(package = "magrittr")
   library(package = "doParallel")
   library(package = "doRNG")
   source("src/predictions/sample_path/wiener_parameters.R")
@@ -11,12 +13,11 @@ simul_paths <- function(model, smpl_size, seed = 2132326000,
   source("src/predictions/sample_path/simulate_parameters.R")
   source("src/predictions/sample_path/simulate_rndwalk.R")
   
-  # Maintains progress log during the simulation
   name <- paste0("results/sample_path/progress-log-", Sys.time(), ".txt")
   writeLines(text = "", con = name)
-  
+  # Takes all the non-redundant parameters
   ind_param <- combine_param(nu = nu, wiener = wiener,
-                             rho = rho, omega = omega)
+                             rho = rho, omega = omega) %>% slice(1:72)
   set.seed(seed)
   registerDoParallel(cores = cores)
   results <- foreach(params = iter(obj = ind_param,
