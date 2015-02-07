@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{graphicx}
+\graphicspath{{~/Dropbox/Slava/Masters/}}
+
+\begin{document}
+\listoffigures
+
+\section*{Images}
+
+\begin{figure}
+\center
+\includegraphics[width = \textwidth, height = 5in]{1.pdf}
+\caption{Accuracy condition.}
+\label{fig:plot1}
+\end{figure}
+
+\ref{fig:plot1} is a great example of correlation effects.
+
+
+\end{document}
