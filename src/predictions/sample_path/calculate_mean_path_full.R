@@ -1,23 +1,23 @@
 
-library(package = "magrittr")
-library(package = "doParallel")
-
 calc_mean_path <- function(path_sample, alpha) {
   # Calculates mean sample path centered on
   # Takes a list of numeric vectors path_sample, numeric vector alpha,
   # and returns a numeric vector mean_path
   mean_path <- path_sample %>% sapply(length) %>% max %>%
-    as.data.frame %>% 
-    do({sapply(X = path_sample, 
-               FUN = function(path) {
-                 bound <- findInterval(x = path[.],
-                                       vec = c(-.1, .01, .1, .3))
-                 c(path, rep(x = alpha[bound], times = . - length(path)))
+               as.data.frame %>% 
+               do({sapply(X = path_sample, 
+                          FUN = function(path) {
+                                bound <- findInterval(x = rev(path)[1],
+                                                      vec = c(-.1, .01, .1, .3))
+                                c(path, rep(x = alpha[bound],
+                                            times = as.numeric(.) - length(path)))
+                            
                },
-               simplify = TRUE) %>% as.data.frame}) %>% 
-    rowMeans
+               simplify = TRUE) %>% as.data.frame}) %>%
+    rowMeans 
   return(mean_path)
 }
+
 
 calc_model_paths <- function(paths, alpha, cores = 1) {
   # Calculates mean sample paths for all simulated paths

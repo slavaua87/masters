@@ -16,4 +16,4 @@ with(data = settings, expr = plot_mean_paths(paths = paths, cores = cores,
                                              nrow = nrow, ncol = ncol, 
                                              nplots = nplots))
  
-
+  

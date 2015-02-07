@@ -8,20 +8,22 @@ plot_mean_paths <- function(paths, cores = 1, nrow = 6,
   library(package = "reshape2")
   library(package = "dplyr")
   library(package = "ggplot2")
+  library(package = "doParallel")
   source("src/predictions/sample_path/calculate_mean_path_full.R")
   source("src/predictions/sample_path/wiener_parameters.R")
   source("src/predictions/sample_path/combine_parameters.R")
   
   ind_param <- combine_param(nu = nu, wiener = wiener,
                              rho = rho, omega = omega)
-   
+  
+  bounds <- c(0, rev(unique(ind_param$alpha)))
   thresholds <- data.frame(upper = rep(unique(ind_param$alpha),
                                        each = nplots / speeds),
-                          lower = 0, 
-                          condition = seq_len(9 * nplots),
-                          graphs = rep(1:9, each = nplots))
+                           lower = 0, 
+                           condition = seq_len(9 * nplots),
+                           graphs = rep(1:9, each = nplots))
   
-  calc_model_paths(paths, cores = cores) %>% melt %>% 
+  calc_model_paths(paths, alpha = bounds, cores = cores) %>% melt %>% 
     rename(state = value, condition = L2, model = L1) %>%
     mutate(graph = cut(x = condition, labels = FALSE, 
                        breaks = max(condition) / nplots)) %>%
