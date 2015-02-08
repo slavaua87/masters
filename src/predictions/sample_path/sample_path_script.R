@@ -1,15 +1,15 @@
 
 # Sets the root directory and then uses relative paths
-setwd("~/Dropbox/Slava/Masters/")
+setwd("~Masters/")
 source("src/predictions/sample_path/simulate_sample_paths.R")
 
 # Specifies simulation settings
 settings <- list(models = c("independent", "normal", "t"),
-                 smpl_size = 5,
+                 smpl_size = 5000,
                  seeds = c(1316048320, -1572737661, 195896225),
                  sigma = .1,
                  time_unit = 1e-3,
-                 cores = 3)
+                 cores = 20)
 
 # Simulates paths for the three models
 timer <- proc.time()
