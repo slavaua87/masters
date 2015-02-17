@@ -43,6 +43,9 @@ Started using git branching for each piece of the project. Gonna practice branch
 \section{26/01/2015}
 Used reshape2 to melt lists into data frames. Learned dplyr - very useful. May need to produce graphs on giverny given the memory limitations. Layout of samples paths is not clear yet - 11 look better than 22 per plot.
 
+\section{17/02/2015}
+Moving to the second part. 
+
 
 
 

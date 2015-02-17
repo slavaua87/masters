@@ -1,6 +1,6 @@
 
 # Sets the root directory and then uses relative paths
-setwd("~Masters/")
+setwd("~/Dropbox/Slava/Masters/")
 source("src/predictions/sample_path/simulate_sample_paths.R")
 
 # Specifies simulation settings

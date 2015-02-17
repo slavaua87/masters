@@ -1,16 +1,16 @@
 Two projects:
 3 models
-  Predictions (188 conditions = 2 s/a x 11 bright x 9 corr)
-    Sample paths
+  Predictions 
+    Sample paths - (72 conditions = 2 s/a x 6 bright x 6 corr)
       Simulated paths 
       Mean, sds
       Plots
-	Time series
-    Behavioral
+	Time series - done
+    Behavioral - (188 conditions = 2 s/a x 11 bright x 9 corr)
       RTs and Rs
-      Density shapes, means, sds, kurtosis, skew
+      Density shapes, means, sds, kurtosis, skew, quantiles
       Plots
-	Violin, correlation, latency-prob
+	Violin, correlation, latency-prob, quantile-prob
       
   Data fitting -
     Preprocessing
