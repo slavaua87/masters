@@ -1,2 +1,2 @@
-# project1
-# thesis data, code, notes
+# ms
+# data, code
