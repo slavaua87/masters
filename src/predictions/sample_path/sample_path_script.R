@@ -18,13 +18,16 @@ paths <- with(data = settings,
                             MoreArgs = list(smpl_size, sigma, time_unit, cores), 
                             SIMPLIFY = FALSE))
 timer <- proc.time() - timer
+
 # Saves computational time
 capture.output(timer, 
                file = paste0("results/sample_path/computational-time-",
                              Sys.Date(), ".txt"))
+
 # Saves a compressed nested list of paths in binary format
 save(paths, file = paste0("results/sample_path/paths-", Sys.Date(),
                           ".RData"), compress = "gzip")
+
 # Saves machine/software/settings configuration for reproducibility
 capture.output(sessionInfo(),
                file = paste0("results/sample_path/machine-software-config-",

@@ -75,7 +75,7 @@ plot_mean_paths <- function(paths, cores = 1, rows = 6,
                                   color = model),
                               data = filter(reordered, sum_stat == "mean_path"),
                               alpha = 1, size = .2) +                    
-          theme_fivethirtyeight() + ylab("Evidence") + xlab("Time (ms)") +
+          theme_solarized_2() + ylab("Evidence") + xlab("Time (ms)") +
                     geom_ribbon(aes(x = time, ymin = means - ci, 
                                     ymax = means + ci, 
                                     fill = model, 
