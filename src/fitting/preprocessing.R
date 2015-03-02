@@ -1,21 +1,18 @@
 
 
-########### Clean up
-rm(list=ls())
-library(plyr)
-########### Get data
-#setwd("C:Users/Liberte/Dropbox/Slava/Research/Decision making models/Rouder_data/")
-setwd("/media/sn/Windows7_OS/Users/Liberte/Dropbox/Slava/Masters/Rouder_data")
-rt.data <- read.table('rr98-data.txt', sep = ' ', header = F)
-rt.data <- rt.data[, -c(6, 10)]
+
+setwd("~/Dropbox/Slava/Masters/")
+rr_data <- read.table('data/rr98_data.txt', sep = ' ', header = F) %>% 
+  select(-6, -10)
+colnames(rr_data) <- c('subj', 'sess', 'dist', 'prop', 
+                       'instr', 'resp', 'rt', 'tr_id')
 
 ########### Data structure 
 # 3 subjects, sess 1 is practice, instr 1 is acc, rt requires cleaning, 
 # tr_id is not a rt 
 
 # Add labels
-colnames(rt.data) <- c('subj', 'sess', 'dist', 'prop', 
-                       'instr', 'resp', 'rt', 'tr_id')
+
 # Adjust response and add accuracy
 rt.data[, 'resp'] <- rt.data[, 'resp'] + 1
 rt.data[, 'acc'] <- as.numeric(rt.data[, 'dist'] == rt.data[, 'resp'])

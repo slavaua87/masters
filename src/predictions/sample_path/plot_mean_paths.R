@@ -1,9 +1,9 @@
 
 
-plot_mean_paths <- function(paths, cores = 1, rows = 6, 
-                            cols = 2) {
+plot_mean_paths <- function(paths, cores = 1, rows = 6, cols = 2) {
   # Plots a grid of mean paths of 3 models for nrow * ncol conditions
   # Takes list of lists of numeric vectors, integer scalars and saves an image
+  
   library(package = "magrittr")
   library(package = "reshape2")
   library(package = "dplyr")

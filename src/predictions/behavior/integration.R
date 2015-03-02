@@ -24,21 +24,25 @@ test.dens <- function(x, r, m, s, a, b, dim1, dim2) {
   return(dens)
 }
 
-test.norm <- function(t, mu, sig) {
+test.norm <- function(y, mu, sig) {
   # change variable
-  x <- t / (1 - t^2)
+  x <- y / (1 - y ^ 2)
   # calculate jacobian
-  jacob <- (t ^ 2 + 1) / (1 - t^2) ^ 2
+  jacob <- (y ^ 2 + 1) / (1 - y ^ 2) ^ 2
   #calculate density
-  dens <- dnorm(x[1], mu, sig) * 
-          dnorm(x[2], mu, sig) * 
-          prod(jacob)
+  dens <- dnorm(x, mu, sig) * jacob
   return(dens)
 }
 
+dnorm(x[2], mu, sig) * 
+  prod(jacob)
+
+
 mu <- 0
 sig <- 1
-cubature::adaptIntegrate(test.norm, c(-1, -1), c(0, 1), mu, sig)
+cubature::adaptIntegrate(test.norm, c(-.5), .5, mu = mu, sig = sig)
+
+cubature::adaptIntegrate(test.norm, c(-1, -1), c(1, 0), mu, sig)
                         
 cuhre(ndim = 2, ncomp = 1, integrand = test.norm, mu, sig,
       lower = c(-11, -100), upper = c(0, 100), key = 13)
