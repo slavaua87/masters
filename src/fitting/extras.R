@@ -1,15 +1,26 @@
 
 
 
-setwd("~/Dropbox/Slava/Masters/")
-rr_data <- read.table('data/rr98_data.txt', sep = ' ', header = F) %>% 
-  select(-6, -10)
-colnames(rr_data) <- c('subj', 'sess', 'dist', 'prop', 
-                       'instr', 'resp', 'rt', 'tr_id')
+
+# Overall block performances over subjects for some session
+rr_data %<>% group_by(subj, )
+filter(rr_data, tr_id != 0, sess == 1) %>%
+  ggplot(data = ., aes(x = rt, 
+                       group = interaction(block, sess, subj), 
+                       colour = subj)) + 
+  facet_wrap(facets = ~block, nrow = 3, ncol = 3, scale = "free") + 
+  geom_density() + 
+  xlim(0, 1300)
+
+
+est <- c(-16.6, 0,  17.7,  -32.9,  -50.0,  -66.9)  
+
+exp(17.7) / sum(exp(est))
+
+
 
 ########### Data structure 
-# 3 subjects, sess 1 is practice, instr 1 is acc, rt requires cleaning, 
-# tr_id is not a rt 
+# 3 subjects, sess 1 is practice, instr 1 is acc
 
 # Add labels
 
@@ -26,21 +37,21 @@ rt.data2 <- rt.data[rt.data[, 'tr_id'] != 0, ]
 head(rt.data2)
 ########### Clean out extremely fast trials by subject 
 rt.data3 <- rbind(rt.data2[rt.data2[, 'subj'] == 'jf' & 
-                          rt.data2[, 'rt'] >= 200, ],
+                             rt.data2[, 'rt'] >= 200, ],
                   rt.data2[rt.data2[, 'subj'] == 'kr' & 
-                          rt.data2[, 'rt'] >= 200, ],
+                             rt.data2[, 'rt'] >= 200, ],
                   rt.data2[rt.data2[, 'subj'] == 'nh' & 
-                          rt.data2[, 'rt'] >= 200, ])
+                             rt.data2[, 'rt'] >= 200, ])
 
 ########### Clean out extremely slow trials
 # Take data for a condition and reomves slow outliers 
 slow.cut <- function(ind, rt.data3, cntr.tend, n.sd) {
   subj <- c('jf', 'kr', 'nh')
   rt.cond <- rt.data3[rt.data3[, 'subj'] == subj[ind[1]] & 
-                      rt.data3[, 'instr'] == ind[2] & 
-                      rt.data3[, 'prop'] == ind[3], ]
+                        rt.data3[, 'instr'] == ind[2] & 
+                        rt.data3[, 'prop'] == ind[3], ]
   loc <- mean(rt.cond[, 'rt'])
-  spr <- sd(rt.cond[, 'rt']) * 3
+  spr <- sd(rt.cond[, 'rt']) * 4
   cut.off <- loc + spr
   rt.clean <- rt.cond[rt.cond[, 'rt'] < cut.off, ]
   return(rt.clean)
@@ -75,17 +86,17 @@ Get.Rt.Plot1 <- function(exp.data, part, instr, ratio) {
                                   exp.data$prop == ratio &
                                   exp.data$acc == 1, 'rt'],
               s1.err = -exp.data[exp.data$subj == part[1]  & 
-                                  exp.data$instr == instr   &
-                                  exp.data$prop == ratio &
-                                  exp.data$acc == 0, 'rt'],
+                                   exp.data$instr == instr   &
+                                   exp.data$prop == ratio &
+                                   exp.data$acc == 0, 'rt'],
               s2.cor = exp.data[exp.data$subj == part[2]  & 
                                   exp.data$instr == instr   &
                                   exp.data$prop == ratio &
                                   exp.data$acc == 1, 'rt'],
               s2.err = -exp.data[exp.data$subj == part[2]  & 
-                                  exp.data$instr == instr   &
-                                  exp.data$prop == ratio &
-                                  exp.data$acc == 0, 'rt'])
+                                   exp.data$instr == instr   &
+                                   exp.data$prop == ratio &
+                                   exp.data$acc == 0, 'rt'])
   return(rts)
 }
 # Graph conditional distributions
@@ -115,12 +126,12 @@ Get.Rt.Plot2 <- Vectorize(FUN = function(exp.data, part, inst, ratio) {
   ind <- seq(0, 32, 1)[c(1 + ratio, 33 - ratio)]
   # Get full dataset for a particular accuracy level and instruction
   Cond.data <- rbind(exp.data[exp.data$subj == part &
-                              exp.data$inst == inst &
-                              exp.data$prop == ind[1],
+                                exp.data$inst == inst &
+                                exp.data$prop == ind[1],
                               c('acc', 'rt')],
                      exp.data[exp.data$subj == part &
-                              exp.data$inst == inst &
-                              exp.data$prop == ind[2],
+                                exp.data$inst == inst &
+                                exp.data$prop == ind[2],
                               c('acc', 'rt')])
   return(Cond.data)
 }, vectorize.args = c('ratio'), SIMPLIFY = F)
@@ -144,7 +155,7 @@ Calc.Cond.Graph <- function(Cond.data, qs) {
   ### Description of arguments
   # exp.data - array
   # qs - vector
-    
+  
   # Quantile Counts and index
   qs.n <- length(qs)
   cond.n <- length(Cond.data)
@@ -178,7 +189,7 @@ Graph.QP <- function(exp.data, part, inst, ratio,
   
   # Lines for 2 conditions
   rt.graph <- Calc.Cond.Graph(Cond.data, qs)
-    
+  
   # Plotting options
   qs.n <- length(qs)
   min.rt <- min(rt.graph[-(qs.n + 1), ])
@@ -210,7 +221,7 @@ Graph.Ser.Acf <- function(exp.data, part, sess, block) {
                  ((block[2] - 1) * 100 + block[2]):(block[2] * 100 + block[2]))
   # Get a block of RTs   
   rts <- exp.data[exp.data$subj == part  & 
-                  exp.data$sess == sess, 'rt'][block.ind]
+                    exp.data$sess == sess, 'rt'][block.ind]
   plot(acf(rts, plot = F), ylab = 'Auto-correlation', 
        main = 'Auto-correlation within a Block')
   plot.ts(rts, xlab = 'Trial', ylab = 'Response Time', 
@@ -229,37 +240,37 @@ Graph.Ser.Acf(rt.data2, part, sess, block)
 Ind.Rt <- function(rt.final, part, instr, ratio) {
   # Create 4 matrices for each combination of conditions
   rt <- list(subj1.cor = c(rt.final[rt.final$subj == part[1]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[1] &
-                                        rt.final$acc == 1, 7],
-                               rt.final[rt.final$subj == part[1]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[2] &
-                                        rt.final$acc == 1, 7]),
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[1] &
+                                      rt.final$acc == 1, 7],
+                           rt.final[rt.final$subj == part[1]  & 
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[2] &
+                                      rt.final$acc == 1, 7]),
              subj1.err = c(rt.final[rt.final$subj == part[1]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[1] &
-                                        rt.final$acc == 0, 7],
-                               rt.final[rt.final$subj == part[1]  & 
-                                        rt.final$instr == instr      &
-                                        rt.final$prop == ratio[2] &
-                                        rt.final$acc == 0, 7]),
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[1] &
+                                      rt.final$acc == 0, 7],
+                           rt.final[rt.final$subj == part[1]  & 
+                                      rt.final$instr == instr      &
+                                      rt.final$prop == ratio[2] &
+                                      rt.final$acc == 0, 7]),
              subj2.cor = c(rt.final[rt.final$subj == part[2]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[1] &
-                                        rt.final$acc == 1, 7],
-                               rt.final[rt.final$subj == part[2]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[2] &
-                                        rt.final$acc == 1, 7]),
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[1] &
+                                      rt.final$acc == 1, 7],
+                           rt.final[rt.final$subj == part[2]  & 
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[2] &
+                                      rt.final$acc == 1, 7]),
              subj2.err = c(rt.final[rt.final$subj == part[2]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[1] &
-                                        rt.final$acc == 0, 7],
-                               rt.final[rt.final$subj == part[2]  & 
-                                        rt.final$instr == instr       &
-                                        rt.final$prop == ratio[2] &
-                                        rt.final$acc == 0, 7])
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[1] &
+                                      rt.final$acc == 0, 7],
+                           rt.final[rt.final$subj == part[2]  & 
+                                      rt.final$instr == instr       &
+                                      rt.final$prop == ratio[2] &
+                                      rt.final$acc == 0, 7])
   )
   return(rt)                                               
 }
@@ -323,7 +334,7 @@ plot.ts(cbind(rt.final[rt.data2$sess == 2 & rt.data2$subj == 'jf', 'rt'],
 
 acf(cbind(rt.final[rt.data2$sess == 2 & rt.data2$subj == 'jf', 'rt'],
           rt.final[rt.data2$sess == 2 & rt.data2$subj == 'jf', 'acc']), 
-          lag.max = 100)
+    lag.max = 100)
 
 ccf(rt.final[rt.data2$sess == 2 & rt.data2$subj == 'jf', 'rt'],
     rt.final[rt.data2$sess == 2 & rt.data2$subj == 'jf', 'acc'])
@@ -412,5 +423,53 @@ cor(all.data$acc[ind], all.data$rt[ind])
 
 
 
+
+
+#### probability integration
+
+
+calc_prob_integrand <- function(dimensions, diffusion, params,
+                                lower, upper, model) {
+  # Purpose: Calculates integrand for the probability of choice associated
+  # with the lower bound
+  # Input: numeric scalars drift, bias, nondec, diffusion, 
+  # numeric vector params, character scalar model
+  # Output: numeric scalar integrand
+  
+  drift <- dimensions[1]
+  bias <- dimensions[2]
+  nondec <- dimensions[3]
+  
+  drift_trans <- drift / (1 - drift ^ 2)
+  nondec_trans <- nondec / (1 - nondec)
+  
+  choice_prob <- pwiener(q = .Machine$double.xmax, 
+                         alpha = params[1, "alpha"] / diffusion, 
+                         tau = nondec_trans, beta = bias, 
+                         delta = drift_trans / diffusion,
+                         resp = "lower")
+  param_dens <- calc_density(drift = drift_trans, bias = bias,
+                             nondec = nondec_trans,
+                             params = params, lower = lower,
+                             upper = upper, model = model)
+  jacobian <- (1 + drift ^ 2) / (1 - drift ^ 2) ^ 2 / (1 - nondec) ^ 2
+  integrand <- choice_prob * param_dens * jacobian
+  return(integrand)
+}
+
+integrate_prob <- function(diffusion, params, model, tol, maxEval) {
+  # Purpose: Integrates choice probability with respect to parameters' density
+  # Input: numerical scalar diffusion, numerical vector params, 
+  # character scalar model, numerical scalar tol
+  # Output: numerical scalar integral_out
+  
+  integral_out <- adaptIntegrate(f = calc_prob_integrand, 
+                                 lowerLimit = c(-1, 0, 0), 
+                                 upperLimit = c(1, 1, 1), 
+                                 diffusion, choice, params,
+                                 model, tol = tol, fDim = 1,
+                                 maxEval = maxEval)
+  return(integral_out)
+}
 
 

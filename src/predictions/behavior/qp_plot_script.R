@@ -3,7 +3,7 @@
 setwd("~/Dropbox/Slava/Masters/")
 source("src/predictions/behavior/plot_behavior.R")
 behavior_sum <- 
-  read.table(file = "results/behavior/behavior-summary-2015-03-01.txt",
+  read.table(file = "results/behavior/behavior-summary-2015-03-03.txt",
              header = TRUE)
 
 # Specifies plotting settings

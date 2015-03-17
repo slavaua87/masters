@@ -1,11 +1,12 @@
 
 # Sets the root directory and then loads behavioral data sampler
+library("dplyr")
 setwd("~/Dropbox/Slava/Masters/")
 source("src/predictions/behavior/simulate_behavior.R")
 
 # Specifies simulation settings
 settings <- list(models = c("independent", "normal", "t"),
-                 smpl_size = 1e3,
+                 smpl_size = 1e2,
                  seeds = c(-1605742457, -1480525591,  1868731723),
                  sigma = .1,                 
                  cores = 1)
