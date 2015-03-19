@@ -16,33 +16,32 @@ simul_copula <- function(smpl_size, params, model) {
     return(cop_smpl)
   }
   cop_pdf <- ellipCopula(family = model, 
-                         param = 
-                           as.numeric(
-                             params[1, c("rho_db", "rho_dt", "rho_bt")]), 
+                         param = as.numeric(
+                           params[1, c("rho_db", "rho_dt", "rho_bt")]),        
                          dim = 3, dispstr = 'un', 
                          df = as.numeric(params[1, "omega"]))
   cop_smpl <- rCopula(n = smpl_size, copula = cop_pdf)
   return(cop_smpl)
 }
 
-ptnorm_quant <- function(p, interval, mean, sigma, lower, upper, ...) {
+#ptnorm_quant <- function(p, interval, mean, sigma, lower, upper, ...) {
   # Purpose: calculates the quantile function of a truncated normal variable
   # Input: numeric scalar p, numeric vector interval, numeric scalars mean,
   # sigma, lower, upper, optional arguments to uniroot ...
   # Output: numeric scalar quant
 
-  ptnorm_root <- function(q) {
-    lower_prob <- pnorm(q = lower, mean = mean,
-                        sd = sigma, lower.tail = TRUE)
-    upper_prob <- pnorm(q = upper, mean = mean,
-                        sd = sigma, lower.tail = TRUE)
-    root <- (pnorm(q = q, mean = mean, sd = sigma, lower.tail = TRUE) - 
-               lower_prob) / (upper_prob - lower_prob) - p
-    return(root)
-  }
-  quant <- uniroot(f = ptnorm_root, interval = interval, ...)$root
-  return(quant)
-}
+#  ptnorm_root <- function(q) {
+#    lower_prob <- pnorm(q = lower, mean = mean,
+#                        sd = sigma, lower.tail = TRUE)
+#    upper_prob <- pnorm(q = upper, mean = mean,
+#                        sd = sigma, lower.tail = TRUE)
+#    root <- (pnorm(q = q, mean = mean, sd = sigma, lower.tail = TRUE) - 
+#               lower_prob) / (upper_prob - lower_prob) - p
+#    return(root)
+#  }
+#  quant <- uniroot(f = ptnorm_root, interval = interval, ...)$root
+#  return(quant)
+#}
 
 calc_param <- function(cop_smpl, params) {
   # Purpose: transforms copula draws to parameter draws using inverse cdfs
@@ -59,19 +58,22 @@ calc_param <- function(cop_smpl, params) {
   shape1 <- as.numeric(((1 - params[1, "lambda"]) / params[1, "gamma"] ^ 2 -
                          1 / params[1, "lambda"]) * params[1, "lambda"] ^ 2)
   shape2 <- as.numeric(shape1 * (1 / params[1, "lambda"] - 1))
+  shape <- as.numeric((params[1, "chi"] / params[1, "phi"]) ^ 2)
+  scale <- as.numeric(params[1, "phi"] ^ 2 / params[1, "chi"])
   param_smpl[, "alpha"] <- as.numeric(params[1, "alpha"])
   param_smpl[, "delta"] <- qnorm(p = cop_smpl[, 1], 
                                  mean = as.numeric(params[1, "nu"]),
                                  sd = as.numeric(params[1, "eta"]))
   param_smpl[, "beta"] <- qbeta(p = cop_smpl[, 2], 
                                 shape1 = shape1, shape2 = shape2)
-  param_smpl[, "t_nd"] <- sapply(X = cop_smpl[, 3],
-                                 FUN = ptnorm_quant,
-                                 interval = c(.Machine$double.xmin, 10), 
-                                 mean = as.numeric(params[1, "chi"]),
-                                 sigma = as.numeric(params[1, "phi"]),
-                                 lower = 0, upper = Inf,
-                                 extendInt = "upX", tol = 1e-4)
+  param_smpl[, "t_nd"] <- qgamma(cop_smpl[, 3], shape = shape, scale = scale)
+#  param_smpl[, "t_nd"] <- sapply(X = cop_smpl[, 3],
+#                                 FUN = ptnorm_quant,
+#                                 interval = c(.Machine$double.xmin, 10), 
+#                                 mean = as.numeric(params[1, "chi"]),
+#                                 sigma = as.numeric(params[1, "phi"]),
+#                                 lower = 0, upper = Inf,
+#                                 extendInt = "upX", tol = 1e-4)
   return(param_smpl)
 }
 

@@ -1,5 +1,7 @@
+setwd("~/Dropbox/Slava/Masters/")
 
 source("src/fitting/integrate_pdf.R")
+source("src/fitting/calculate_weibull.R")
 
 dtmvt <- tmvtnorm::dtmvt
 
@@ -131,8 +133,30 @@ joint_logdensity <- function(behav_data, theta, model) {
       lkj_logkernel(rho = theta[74:76], omega = theta[22]),
       lkj_logkernel(rho = theta[77:79], omega = theta[22]),
       lkj_logkernel(rho = theta[80:82], omega = theta[22])))
+    
+    theta <- inits[c(seq(23, 64, 3)[seq(1, 14, 2)], seq(65, 73, 3), 74:76)]
+    theta <- c(theta[1], weibull(17, theta[2], theta[3], theta[4], theta[5]),
+               theta[8], theta[6], theta[9], theta[7], theta[10], theta[11:13])
+    
+    # make sure length is flexible to account for subsampling
+    dat_mat <- group_by(obs, subj) %>% 
+        transmute(rt = rt, choice = resp, alpha = , nu = , eta = ,
+                  lambda = , gamma = , chi = , phi = , rho = )
+    })
+    
+    
+    
+    c(seq(24, 73, 3), 77:79)
+    c(seq(25, 73, 3), 80:82)
+    
+    group_by(rr_data, )
+    behav_logdensity <- log(c(
+      integrate_density_vec(rt = , choice = , sigma = .1, 
+                            params = params, model = model, tol = 1e-2)))
+                              
+    # Notes: params vector has the following order - 1:alpha, 2:nu, 3:eta,
+    # 4:lambda, 5:gamma, 6:chi, 7:phi, 8:rho_db, 9:rho_dt, 10:rho_bt
+    
   }
-  behav_logdensity <- integrate_density_vec()
-  
 }
   

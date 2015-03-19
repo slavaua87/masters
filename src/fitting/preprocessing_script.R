@@ -40,7 +40,7 @@ rr_processed %<>% remove_slow(center_meas = median, n_sd = 3) %>%
 # Remove non-responses
 rr_processed %<>% filter(resp != 3)
 
-# Saves processed data
+# Save processed data
 write.table(x = rr_processed, file = "data/rr_processed.txt", sep = " ",
             col.names = TRUE)
 
