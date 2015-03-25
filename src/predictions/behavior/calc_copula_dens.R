@@ -1,7 +1,4 @@
 
-library("copula")
-library("tmvtnorm")
-
 backsub <- function(r, x, upper.tri = TRUE, transpose = FALSE) {
   y <- .Internal(call = backsolve(r, x, 3, upper.tri, transpose))
   return(y)
@@ -9,17 +6,6 @@ backsub <- function(r, x, upper.tri = TRUE, transpose = FALSE) {
 
 cholesky <- function(x, pivot = FALSE, LINPACK = FALSE, tol = -1) {
   .Internal(call = La_chol(x, pivot, tol))
-}
-
-t_logcopula <- function(cop_value, sqrt_rho, df) {
-  x <- qt(p = cop_value, df = df)
-  sqrt_rho_x <- backsub(r = sqrt_rho, x = x, transpose = TRUE)
-  rho_x <- sum(sqrt_rho_x ^ 2)
-  logdens <- (lgamma((3 + df) / 2) - 
-                (lgamma(df / 2) + sum(log(as.numeric(sqrt_rho)[c(1, 5, 9)])) + 
-                   1.5 * log(pi * df)) - 0.5 * (df + 3) * 
-                log1p(rho_x / df)) - sum(log(dt(x, df)))  
-  return(logdens)
 }
 
 normal_logcopula <- function(cop_value, sqrt_rho) {
@@ -32,12 +18,10 @@ normal_logcopula <- function(cop_value, sqrt_rho) {
   return(logdens)
 }
 
-
-calc_logdensity <- function(delta, beta, t_nd, params,
+calc_logdensity <- function(delta, beta, t_nd, nu, eta,
                             shape1, shape2, shape, scale,
                             sqrt_rho, model) {
-  # Calculates probability density for independent, normal and 
-  # t copula-based models
+  # Calculates probability density for independent and normal
   # Input is a numeric scalars delta, beta, t_nd, 
   # numeric data.frame params, character scalar model
   # Output is a numeric scalar dens
@@ -45,7 +29,7 @@ calc_logdensity <- function(delta, beta, t_nd, params,
   # 4:lambda, 5:gamma, 6:chi, 7:phi, 8:rho_db, 9:rho_dt, 10:rho_bt, 11:omega
     
   marginal_dens <- c(
-    dnorm(x = delta, mean = params[2], sd = params[3]), 
+    dnorm(x = delta, mean = nu, sd = eta), 
     dbeta(beta, shape1 = shape1, shape2 = shape2),
     dgamma(x = t_nd, shape = shape, scale = scale))
   if (any(marginal_dens == 0)) {
@@ -57,11 +41,9 @@ calc_logdensity <- function(delta, beta, t_nd, params,
     return(marginal_logdens)
   }
   
-  cop_value <- c(pnorm(q = delta, mean = params[2], 
-                       sd = params[3]),
+  cop_value <- c(pnorm(q = delta, mean = nu, sd = eta,),
                  pbeta(q = beta, shape1 = shape1, shape2 = shape2),
-                 pgamma(q = t_nd, shape = shape, 
-                        scale = scale, lower.tail = TRUE))
+                 pgamma(q = t_nd, shape = shape, scale = scale))
   
   if (any(cop_value <= sqrt(.Machine$double.xmin))) {
     cop_value[cop_value <= sqrt(.Machine$double.xmin)] <- 
@@ -72,15 +54,7 @@ calc_logdensity <- function(delta, beta, t_nd, params,
       .Machine$double.neg.eps
   }
   
-  if (model == "normal") {
-    joint_logdens <- normal_logcopula(cop_value = cop_value,
-                                      sqrt_rho)
-  }
-  if (model == "t") {
-    joint_logdens <- t_logcopula(cop_value = cop_value,
-                                 sqrt_rho,
-                                 df = params[11])
-  }
+  joint_logdens <- normal_logcopula(cop_value = cop_value, sqrt_rho)
   logdens <- sum(joint_logdens, marginal_logdens)
   return(logdens)
 }

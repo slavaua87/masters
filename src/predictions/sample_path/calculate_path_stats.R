@@ -36,6 +36,7 @@ calc_model_paths_stats <- function(path_sample, alpha) {
   # mean and sd functions
   # Takes a list of n numeric vectors path_sample, numeric scalar alpha and 
   # returns a list of 2 numeric vectors for each response paths_stats
+  
   resp_index <- sapply(X = path_sample, 
                              FUN = function(x) {
                                min(x) %>% findInterval(vec = c(-.1, 0), 

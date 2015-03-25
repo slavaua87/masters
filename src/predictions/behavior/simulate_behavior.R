@@ -1,4 +1,14 @@
 
+library(package = "dplyr")
+library(package = "magrittr")
+library(package = "doParallel")
+library(package = "doRNG")
+
+source(file = "src/predictions/behavior/wiener_parameters.R")
+source(file = "src/predictions/behavior/combine_parameters.R")
+source(file = "src/predictions/behavior/simulate_wiener_parameters.R")
+source(file = "src/predictions/behavior/simulate_rndwalk_rts.R")
+source(file = "src/predictions/behavior/calculate_summary.R")
 
 simul_behavior <- function(model, smpl_size, seed = 1771363045,
                            sigma = .1, cores = 1) {
@@ -6,17 +16,7 @@ simul_behavior <- function(model, smpl_size, seed = 1771363045,
   # different copula models 
   # Input: character scalar model, numerical scalars smpl_size,
   # seed, sigma, cores
-  # Ouput: numeric data.frame
-  
-  library(package = "dplyr")
-  library(package = "magrittr")
-  library(package = "doParallel")
-  library(package = "doRNG")
-  source(file = "src/predictions/behavior/wiener_parameters.R")
-  source(file = "src/predictions/behavior/combine_parameters.R")
-  source(file = "src/predictions/behavior/simulate_wiener_parameters.R")
-  source(file = "src/predictions/behavior/simulate_rndwalk_rts.R")
-  source(file = "src/predictions/behavior/calculate_summary.R")
+  # Ouput: numeric data.frame results
   
   name <- paste0("results/behavior/progress-log-", Sys.time(), ".txt")
   writeLines(text = "", con = name)
@@ -41,7 +41,7 @@ simul_behavior <- function(model, smpl_size, seed = 1771363045,
              calc_quant_prob(behav_smpl = behav_smpl)
   }
   
-  results <- rbind_all(results) %>%
+  results <- bind_rows(results) %>%
     mutate(instruction = c("accuracy", "speed")[rep(c(1, 2), each = 60)] %>%
              rep(times = 9), 
            condition = nrow(ind_param) %>% seq_len %>% 
