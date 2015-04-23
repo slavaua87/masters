@@ -1,7 +1,5 @@
 
 
-library("copula")
-
 simul_copula <- function(smpl_size, params, model) {
   # Purpose: draws a sample from a model-specified copula
   # Input: numeric scalar smpl_size, numeric vector params,

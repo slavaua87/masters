@@ -17,17 +17,17 @@ plot_mean_paths <- function(paths, cores = 1, rows = 6, cols = 2) {
   ind_param <- combine_param(nu = nu, wiener = wiener,
                              rho = rho, omega = omega) %>%
                slice(1:72) %>% mutate(condition = 1:72)
-  acc_index <- filter(ind_param, alpha == 0.221) %>% select(condition)
+  acc_index <- filter(ind_param, alpha == 0.221) %>% dplyr::select(condition)
   
-  bounds <- c(0, rev(unique(ind_param$alpha)))
+  alpha <- c(0, rev(unique(ind_param$alpha)))
   thresholds <- data.frame(upper = rep(unique(ind_param$alpha),
                                        each = 6),
                            lower = 0, 
                            plots = seq_len(72),
                            graphs = rep(1:6, each = 12))
   
-  model_paths <- calc_paths_stats(paths, alpha = bounds, cores = cores) %>% 
-    melt %>% 
+  model_paths <- calc_paths_stats(paths, alpha, cores = cores) %>% 
+    melt %>%
     rename(value = value, sum_stat = L4, response = L3,
            condition = L2, model = L1) %>%
     mutate(graph = cut(x = condition, labels = FALSE, 
@@ -38,32 +38,35 @@ plot_mean_paths <- function(paths, cores = 1, rows = 6, cols = 2) {
     mutate(instruction = rep(unique(condition) %in% acc_index$condition + 1,
                                     length(condition))) %>% ungroup %>%
     group_by(instruction) %>% 
-    do({cutoff <- select(., instruction) %>% distinct %>% 
-          unlist %>% '['(c(150, 1000), .)
+    do({cutoff <- dplyr::select(., instruction) %>% distinct %>% 
+          unlist %>% '['(c(500, 10000), .)
         filter(., time < cutoff)
     })
   
   model_paths %>% group_by(graph) %>% 
-    do({graph_index <- select(., graph) %>% distinct %>% as.numeric
+    do({graph_index <- dplyr::select(., graph) %>% distinct %>% as.numeric
         #y_limits <- filter(thresholds, graphs == graph_index) 
-        plot_order <- group_by(., instruction) %>% select(condition) %>% unique
-        plot_order <- ungroup(plot_order) %>% select(condition) %>% unlist %>%
+        plot_order <- group_by(., instruction) %>%
+          dplyr::select(condition) %>% unique
+        plot_order <- ungroup(plot_order) %>%
+          dplyr::select(condition) %>% 
+          unlist %>%
           matrix(nrow = 2, ncol = 6, byrow = TRUE) %>% c
         reordered <- mutate(., plots = factor(x = .$condition, 
                             levels = as.character(plot_order)))
                 
-        conf_int <- group_by(reordered, response, plots, model) %>%  
-                    do({means <- filter(., sum_stat == "mean_path") %>% 
-                                 select(value) %>% unlist
-                        ci <- filter(., sum_stat == "path_sd") %>% 
-                              select(value) %>% 
-                              unlist %>% 
-                              multiply_by(2)
-                        ci <- ci %>% divide_by(sqrt(length(ci)))
-                        data.frame(means = means, ci = ci) %>%
-                        mutate(time = seq(from = 1, by = 1, length.out = n()))
-                    }) %>%           
-                    ungroup
+#        conf_int <- group_by(reordered, response, plots, model) %>%  
+#                    do({means <- filter(., sum_stat == "mean_path") %>% 
+#                          dplyr::select(value) %>% unlist
+#                        ci <- filter(., sum_stat == "path_sd") %>% 
+#                              dplyr::selectselect(value) %>% 
+#                              unlist %>% 
+#                              multiply_by(2)
+#                        ci <- ci %>% divide_by(sqrt(length(ci)))
+#                        data.frame(means = means, ci = ci) %>%
+#                        mutate(time = seq(from = 1, by = 1, length.out = n()))
+#                    }) %>%           
+#                    ungroup
 
         #y_limits <- y_limits[match(plot_order, unlist(y_limits$plots)), ]
         
@@ -71,17 +74,24 @@ plot_mean_paths <- function(paths, cores = 1, rows = 6, cols = 2) {
                     facet_wrap(facets = ~plots, nrow = 6, ncol = 2, 
                                scales = c("free"), as.table = TRUE) +
                     geom_line(aes(x = time, y = value, 
-                                  group = interaction(response, plots, model),
+                                  group = interaction(response, plots,
+                                                      model, sum_stat),
                                   color = model),
-                              data = filter(reordered, sum_stat == "mean_path"),
+                              data = filter(reordered, 
+                                            sum_stat %in% c("fast_mean",
+                                                            "middle_mean",
+                                                            "slow_mean")),
                               alpha = 1, size = .2) +                    
-          theme_solarized_2() + ylab("Evidence") + xlab("Time (ms)") +
-                    geom_ribbon(aes(x = time, ymin = means - ci, 
-                                    ymax = means + ci, 
-                                    fill = model, 
-                                    group = interaction(response, plots, model)),
-                                alpha = 0.5,
-                                data = conf_int)
+                   theme_solarized_2() + 
+                   ylab("Relative Evidence (1/ms)") + 
+                   xlab("Time (ms)") 
+#+
+#                   geom_ribbon(aes(x = time, ymin = means - ci, 
+#                                    ymax = means + ci, 
+#                                    fill = model, 
+#                                    group = interaction(response, plots, model)),
+#                                alpha = 0.5,
+#                                data = conf_int)
                     
         ggsave(ts.graph, 
                filename = paste0("results/sample_path/path-plot-corr",

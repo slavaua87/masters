@@ -7,3 +7,4 @@ weibull <- function(bright, lower, upper, shape, scale) {
             exp(-((bright / scale) ^ shape)))
   return(drifts)
 }
+

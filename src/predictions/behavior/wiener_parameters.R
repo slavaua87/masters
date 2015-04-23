@@ -8,22 +8,22 @@ weibull_param <- data.frame(lower = c(-.352, -.565), upper = c(.329, .511),
 # brightness covariates 
 bright_spd <- data.frame(prop = c(.505, .520, .540, .565, .605, .740))
 
-bright_acc <- data.frame(prop = c(.496, .509, .522, .541, .565, .600))
+bright_acc <- data.frame(prop = c(.496, .502, .510, .520, .528, .540))
 
 
 # drift rate (reflects effect of s/a and brightness)
 source("src/predictions/sample_path/calculate_weibull.R")
 nu <- as.data.frame(t(data.frame(
-                   acc = as.vector(weibull(bright_acc, 
-                                           weibull_param["acc", "lower"],
-                                           weibull_param["acc", "upper"], 
-                                           weibull_param["acc", "scale"], 
-                                           weibull_param["acc", "shape"])),
-                   spd = as.vector(weibull(bright_spd, 
-                                           weibull_param["spd", "lower"],
-                                           weibull_param["spd", "upper"],
-                                           weibull_param["spd", "scale"], 
-                                           weibull_param["spd", "shape"])))))
+  acc = as.vector(weibull(bright_acc, 
+                          weibull_param["acc", "lower"],
+                          weibull_param["acc", "upper"], 
+                          weibull_param["acc", "scale"], 
+                          weibull_param["acc", "shape"])),
+  spd = as.vector(weibull(bright_spd, 
+                          weibull_param["spd", "lower"],
+                          weibull_param["spd", "upper"],
+                          weibull_param["spd", "scale"], 
+                          weibull_param["spd", "shape"])))))
 colnames(nu) <- paste("prop", as.character(1:6), sep = "")
 
 # wiener process (reflects effect of s/a)
@@ -34,7 +34,6 @@ wiener <- data.frame(alpha = c(.221, .05), eta = c(.127, .127),
 
 # copula degrees of freedom and correlations
 omega <- 5
-rho <- data.frame(rho_db = c(.15, .5, .85, .15, .5, .85, -.15, -.5, -.85),
-                  rho_dt = c(-.15, -.5, -.85, .15, .5, .85, -.15, -.5, -.85), 
+rho <- data.frame(rho_db = c(.15, .5, .85, -.15, -.5, -.85, .15, .5, .85),
+                  rho_dt = c(-.15, -.5, -.85, -.15, -.5, -.85, .15, .5, .85), 
                   rho_bt = c(-.15, -.5, -.85, .15, .5, .85, .15, .5, .85))
-

@@ -1,6 +1,4 @@
 
-source("src/fitting/calculate_joint.R")
-
 joint_parallel <- function(train_data, posterior, chain_n, theta_n, cores) {
   # Purpose: parallelizes calculation of the joint density
   # Input: numeric matrices train_data, posterior, integer scalars chain_n, theta_n
@@ -15,7 +13,7 @@ joint_parallel <- function(train_data, posterior, chain_n, theta_n, cores) {
                             model)
   timer <- proc.time() - timer
   cat(paste(chain_id, timer["elapsed"]), 
-      file = "~/Masters/results/fitting/progress-log-test.txt",
+      file = "~/Masters/results/fitting/progress-log-norm-fit.txt",
       sep = "\n",
       append = TRUE)
   joint

@@ -13,8 +13,8 @@ simul_copula <- function(smpl_size, params, model) {
     return(cop_smpl)
   }
   
-  cop_pdf <- ellipCopula(family = model, param = params["rho_db"], 
-                         dim = 2, dispstr = 'un', df = params["omega"])
+  cop_pdf <- ellipCopula(family = model, param = as.numeric(params["rho_db"]), 
+                         dim = 2, dispstr = 'un', df = as.numeric(params["omega"]))
   cop_smpl <- rCopula(n = smpl_size, copula = cop_pdf)
   return(cop_smpl)
 }

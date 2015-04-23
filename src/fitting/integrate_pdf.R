@@ -1,7 +1,4 @@
 
-library("cubature")
-library("RWiener")
-source("src/fitting/calc_copula_dens.R")
 
 calc_density_integrand <- function(dimensions, rt, choice,
                                    sigma, alpha, nu, eta, 
@@ -28,7 +25,7 @@ calc_density_integrand <- function(dimensions, rt, choice,
                         beta = beta, 
                         delta = delta / sigma,
                         resp = choice)
-  if (behav_dens == 0) 
+  if (behav_dens <= 0) 
     behav_dens <- .Machine$double.xmin
   if (is.infinite(behav_dens)) 
     behav_dens <- .Machine$double.xmax
@@ -76,18 +73,19 @@ integrate_density <- function(rt, choice, sigma, alpha, nu, eta,
   }
   eps_neg <- .Machine$double.neg.eps
   eps_pos <- .Machine$double.eps
+  lower_lim <- c(-1 + eps_pos, 0 + eps_pos, .Machine$double.xmin)
+  upper_lim <- c(1 - eps_neg, 1 - eps_neg, rt)
+  
   timer <- proc.time()
   behav_mixture <- adaptIntegrate(f = calc_density_integrand,  
-                                  lowerLimit = c(-1 + eps_pos, 0, 0), 
-                                  upperLimit = c(1 - eps_neg, 1, rt), 
+                                  lowerLimit = lower_lim, 
+                                  upperLimit = upper_lim, 
                                   rt, choice, sigma, 
                                   alpha, nu, eta,
                                   shape1, shape2, shape, scale, 
                                   sqrt_rho, model, tol = tol, 
                                   fDim = 1, maxEval = maxEval)
   timer <- proc.time() - timer
-  print(c(behav_mixture$integral, behav_mixture$functionEvaluations,
-          timer["elapsed"]))
   return(behav_mixture$integral)
 }
 
@@ -96,5 +94,4 @@ integrate_density_vec <- Vectorize(FUN = integrate_density,
                                                       "nu", "eta", "lambda", 
                                                       "gamma", "chi", "phi",
                                                       "rho_db", "rho_dt", "rho_bt"))
-
 

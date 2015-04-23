@@ -31,7 +31,7 @@ plot_behavior_sum <- function(behavior_sum, rows = 3, cols = 2) {
                     
         ggsave(qp_graph, 
                filename = paste0("results/behavior/qp-plot-corr",
-                                 unique(.$graph), "-", Sys.Date(), ".pdf"))
+                                 unique(.$graph), "-", Sys.Date(), ".jpeg"))
   })
 }
 

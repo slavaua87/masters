@@ -1,8 +1,4 @@
 
-### Vectorizes rwiener sampler
-library("RWiener")
-library("magrittr")
-
 rwiener_num <- function(alpha, tau, beta, delta) {
   # Purpose: converts data.frame output of rwiener into a matrix to enable
   # vectorization

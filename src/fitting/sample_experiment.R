@@ -1,6 +1,3 @@
-source(file = "src/fitting/calculate_weibull.R")
-source(file = "src/fitting/simulate_wiener_parameters.R")
-source(file = "src/fitting/simulate_rndwalk_rts.R")
 
 sample_behavior <- function(params, smpl_size, model, sigma = .1) {
   trial_param <- smpl_param(params = params,

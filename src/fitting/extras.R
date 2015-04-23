@@ -45,11 +45,11 @@ rt.data3 <- rbind(rt.data2[rt.data2[, 'subj'] == 'jf' &
 
 ########### Clean out extremely slow trials
 # Take data for a condition and reomves slow outliers 
-slow.cut <- function(ind, rt.data3, cntr.tend, n.sd) {
+slow.cut <- function(norm, rt.data3, cntr.tend, n.sd) {
   subj <- c('jf', 'kr', 'nh')
-  rt.cond <- rt.data3[rt.data3[, 'subj'] == subj[ind[1]] & 
-                        rt.data3[, 'instr'] == ind[2] & 
-                        rt.data3[, 'prop'] == ind[3], ]
+  rt.cond <- rt.data3[rt.data3[, 'subj'] == subj[norm[1]] & 
+                        rt.data3[, 'instr'] == norm[2] & 
+                        rt.data3[, 'prop'] == norm[3], ]
   loc <- mean(rt.cond[, 'rt'])
   spr <- sd(rt.cond[, 'rt']) * 4
   cut.off <- loc + spr
@@ -61,8 +61,8 @@ slow.clean <- function(rt.data3, cntr.tend, n.sd) {
   subj <- rep(1:3, each = 66)
   prop <- rep(c(0:32, 0:32),  3)
   instr <- rep(c(numeric(33), numeric(33) + 1), 3)
-  ind <- matrix(c(subj, instr, prop), 198, 3)
-  rt.data4 <- apply(X = ind, FUN = slow.cut, 1, 
+  norm <- matrix(c(subj, instr, prop), 198, 3)
+  rt.data4 <- apply(X = norm, FUN = slow.cut, 1, 
                     rt.data3, cntr.tend, n.sd)
   return(rt.data4)
 }
@@ -123,15 +123,15 @@ graphics.off()
 # Get data
 Get.Rt.Plot2 <- Vectorize(FUN = function(exp.data, part, inst, ratio) {
   # Mirror proportions of pixels
-  ind <- seq(0, 32, 1)[c(1 + ratio, 33 - ratio)]
+  norm <- seq(0, 32, 1)[c(1 + ratio, 33 - ratio)]
   # Get full dataset for a particular accuracy level and instruction
   Cond.data <- rbind(exp.data[exp.data$subj == part &
                                 exp.data$inst == inst &
-                                exp.data$prop == ind[1],
+                                exp.data$prop == norm[1],
                               c('acc', 'rt')],
                      exp.data[exp.data$subj == part &
                                 exp.data$inst == inst &
-                                exp.data$prop == ind[2],
+                                exp.data$prop == norm[2],
                               c('acc', 'rt')])
   return(Cond.data)
 }, vectorize.args = c('ratio'), SIMPLIFY = F)
@@ -143,10 +143,10 @@ Calc.Cond.Quants <- function(Cond.data, qs) {
   # qs - vector
   
   # Upper responses index
-  ind <- Cond.data[, 1] == 1
+  norm <- Cond.data[, 1] == 1
   # Quantiles for responses
-  qs.upp <- quantile(x = Cond.data[ind, 2], probs = qs)
-  qs.low <- quantile(x = Cond.data[!ind, 2], probs = qs)
+  qs.upp <- quantile(x = Cond.data[norm, 2], probs = qs)
+  qs.low <- quantile(x = Cond.data[!norm, 2], probs = qs)
   return(c(qs.upp, qs.low))
 }
 
@@ -159,7 +159,7 @@ Calc.Cond.Graph <- function(Cond.data, qs) {
   # Quantile Counts and index
   qs.n <- length(qs)
   cond.n <- length(Cond.data)
-  qs.ind <- c((cond.n + 1):(cond.n * 2), cond.n:1)
+  qs.norm <- c((cond.n + 1):(cond.n * 2), cond.n:1)
   
   
   # Calculate probability of a correct response for each condition
@@ -173,7 +173,7 @@ Calc.Cond.Graph <- function(Cond.data, qs) {
   # Restructure quantiles matrix
   quants <- cbind(quants[1:qs.n, ], quants[-(1:qs.n), ])
   quants <- rbind(quants, all.probs)
-  quants <- quants[, qs.ind]  
+  quants <- quants[, qs.norm]  
   return(quants)
 }
 
@@ -217,11 +217,11 @@ Graph.QP(rt.final, part, 1, ratio, qs, 'Accuracy')
 # Graph combining block sequence and acf plot
 Graph.Ser.Acf <- function(exp.data, part, sess, block) {
   # Block index
-  block.ind <- c(((block[1] - 1) * 100 + block[1]):(block[1] * 100 + block[1]),
+  block.norm <- c(((block[1] - 1) * 100 + block[1]):(block[1] * 100 + block[1]),
                  ((block[2] - 1) * 100 + block[2]):(block[2] * 100 + block[2]))
   # Get a block of RTs   
   rts <- exp.data[exp.data$subj == part  & 
-                    exp.data$sess == sess, 'rt'][block.ind]
+                    exp.data$sess == sess, 'rt'][block.norm]
   plot(acf(rts, plot = F), ylab = 'Auto-correlation', 
        main = 'Auto-correlation within a Block')
   plot.ts(rts, xlab = 'Trial', ylab = 'Response Time', 
@@ -418,8 +418,8 @@ points(exp.series[1:100], all.data$acc[1:100], col = 'blue')
 
 
 # Explore correlations between response times and responses
-ind <- 502:601
-cor(all.data$acc[ind], all.data$rt[ind])
+norm <- 502:601
+cor(all.data$acc[norm], all.data$rt[norm])
 
 
 

@@ -33,14 +33,14 @@ sample_prior <- function(model) {
                      runif(n = 1, min = 0, max = .5), #1.172
                      runif(n = 1, min = 0, max = 50),
                      runif(n = 1, min = 0, max = 5),
-                     runif(n = 1, min = 0, max = 1),
+                     runif(n = 1, min = .1, max = .9),
                      runif(n = 1, min = 0, max = 1.884),
                      runif(n = 1, min = 0.001, max = 0.786),
                      runif(n = 1, min = 0, max = .5), #1.172
                      runif(n = 1, min = 0, max = .5), #1.172
                      runif(n = 1, min = 0, max = 50),
                      runif(n = 1, min = 0, max = 5),
-                     runif(n = 1, min = 0, max = 1),
+                     runif(n = 1, min = .1, max = .9),
                      runif(n = 1, min = 0, max = 1.884),
                      runif(n = 1, min = 0, max = 0.658),
                      runif(n = 1, min = 0, max = 0.5),

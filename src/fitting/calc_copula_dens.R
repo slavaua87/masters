@@ -12,7 +12,7 @@ normal_logcopula <- function(cop_value, sqrt_rho) {
   x <- qnorm(p = cop_value)
   marginals <- dnorm(x)
   zero_test <- marginals == 0
-  if (zero_test)
+  if (any(zero_test))
     marginals[zero_test] <- .Machine$double.xmin
   sqrt_rho_x <- backsub(r = sqrt_rho, x = x, transpose = TRUE)
   rho_x <- sum(sqrt_rho_x ^ 2)
@@ -21,8 +21,8 @@ normal_logcopula <- function(cop_value, sqrt_rho) {
   if (any(zero_test))
     rho_diag[zero_test] <- .Machine$double.xmin
   logdens <- (-1.5 * log(2 * pi) - 
-              sum(log(as.numeric(sqrt_rho)[c(1, 5, 9)])) - 
-              0.5 * rho_x) - sum(log(dnorm(x)))  
+              sum(log(rho_diag)) - 
+              0.5 * rho_x) - sum(log(marginals))  
   return(logdens)
 }
 

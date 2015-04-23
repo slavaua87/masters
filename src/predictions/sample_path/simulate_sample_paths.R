@@ -1,9 +1,10 @@
 
 simul_paths <- function(model, smpl_size, seed = 2132326000,
-                        sigma = 1, time_unit = 1e-3, cores = 1) {
+                        sigma = .1, time_unit = 1e-3, cores = 1) {
   # Simulates sample paths in parallel for different copula models 
   # Takes a model string, simulation parameter numerical scalars and 
   # returns a list of lists of numeric vectors
+  
   library(package = "dplyr")
   library(package = "magrittr")
   library(package = "doParallel")

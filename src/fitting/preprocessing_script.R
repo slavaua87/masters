@@ -16,14 +16,14 @@ rr_processed %<>% mutate(resp = resp + 1) %>%
   mutate(acc = as.integer(dist == resp))
 
 # Remove duplicate session 11 from nh
-ind <- (nrow(rr_processed) - 823):nrow(rr_processed)
-rr_processed %<>% slice(-ind)
+norm <- (nrow(rr_processed) - 823):nrow(rr_processed)
+rr_processed %<>% slice(-norm)
 
 # Add a block variable
-ind <- which(select(rr_processed, rt) == 32751)
-rr_processed <- bind_rows(slice(rr_processed, 1:(ind - 1)),
-                          slice(rr_processed, ind),
-                          slice(rr_processed, -(1:(ind - 1))))
+norm <- which(select(rr_processed, rt) == 32751)
+rr_processed <- bind_rows(slice(rr_processed, 1:(norm - 1)),
+                          slice(rr_processed, norm),
+                          slice(rr_processed, -(1:(norm - 1))))
 
 blocks_1 <- rep(x = seq_len(8), each = 103) %>% rep(times = 11)
 blocks_2 <- c(rep(x = seq_len(8), each = 103) %>% rep(times = 7),

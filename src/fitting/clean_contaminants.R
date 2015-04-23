@@ -18,7 +18,7 @@ remove_slow <- function(rr_processed, center_meas, n_sd) {
 }
 
 bin_bound <- function(rt, acc, window_size = 50, p = 0.53) {
-  # Purpose: finds lower bound for removing fast reaction times
+  # Purpose: find lower bound for removing fast reaction times
   # Input: numeric vector rt, integer vector acc, 
   # numeric scalars window_size, p
   # Ouput: numeric scalar bin_breaks[bin + 1]
