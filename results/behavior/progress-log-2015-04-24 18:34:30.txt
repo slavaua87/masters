@@ -1,0 +1,649 @@
+
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
+start 
+copula params done 
+rts done 
