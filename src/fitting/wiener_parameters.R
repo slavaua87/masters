@@ -6,9 +6,9 @@ weibull_param <- data.frame(lower = c(-.352, -.565), upper = c(.329, .511),
                             row.names = c("acc", "spd"))
 
 # brightness covariates 
-bright_spd <- data.frame(prop = c(.505, .520, .540, .565, .605, .740))
+bright_spd <- data.frame(prop = c(.512, .527, .547, .570, .605, .740))
 
-bright_acc <- data.frame(prop = c(.496, .502, .510, .520, .528, .540))
+bright_acc <- data.frame(prop = c(.503, .515, .530, .545, .565, .590))
 
 
 # drift rate (reflects effect of s/a and brightness)

@@ -5,10 +5,11 @@ library("dplyr")
 library("doParallel")
 library("magrittr")
 library("boot")
+setwd("~/Masters/")
 source("src/fitting/wiener_parameters.R")
 source("src/fitting/combine_parameters.R")
 
-n <- 1e5
+n <- 1e4
 m <- 1e3
 k <- 50
 ind_param <- combine_param(nu, wiener, rho, omega)
@@ -28,6 +29,7 @@ stat_boot <- function(data, indices) {
   stat <- c(quantile(rt$q, probs = .1, type = 8), 1 - mean(p))
   return(stat)
 }
+
 timer <- proc.time()
 dat <- dat_sim(pars, n, m, k)
 timer <- proc.time() - timer
@@ -35,3 +37,8 @@ timer <- proc.time() - timer
 #res <- boot(dat, stat_boot, 100, parallel = "multicore", ncpus = 10)
 #boot.ci(res, type = c("basic", "norm", "perc"), index = 1)
 #boot.ci(res, type = c("basic", "norm", "perc"), index = 2)
+
+
+
+
+

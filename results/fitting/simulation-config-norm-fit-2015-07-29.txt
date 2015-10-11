@@ -1,0 +1,30 @@
+$theta_n
+[1] 23
+
+$draw_n
+[1] 1e+05
+
+$model
+[1] "normal"
+
+$alpha
+[1] 0.15
+
+$thread_n
+[1] 60
+
+$chunk_n
+[1] 1
+
+$tol
+[1] 5e-05
+
+$maxEvals
+[1] 5e+06
+
+$seed
+[1] 1800968452
+
+$continue
+[1] TRUE
+

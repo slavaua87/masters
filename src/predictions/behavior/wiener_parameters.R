@@ -12,7 +12,6 @@ bright_acc <- data.frame(prop = c(.496, .502, .510, .520, .528, .540))
 
 
 # drift rate (reflects effect of s/a and brightness)
-source("src/predictions/sample_path/calculate_weibull.R")
 nu <- as.data.frame(t(data.frame(
   acc = as.vector(weibull(bright_acc, 
                           weibull_param["acc", "lower"],
@@ -33,7 +32,7 @@ wiener <- data.frame(alpha = c(.221, .05), eta = c(.127, .127),
                      row.names = c("acc", "spd"))
 
 # copula degrees of freedom and correlations
-omega <- 5
+omega <- 3
 rho <- data.frame(rho_db = c(.15, .5, .85, -.15, -.5, -.85, .15, .5, .85),
                   rho_dt = c(-.15, -.5, -.85, -.15, -.5, -.85, .15, .5, .85), 
                   rho_bt = c(-.15, -.5, -.85, .15, .5, .85, .15, .5, .85))

@@ -1,90 +1,88 @@
 
 
-sample_posterior <- function(train_data, theta_n, chain_n,  
-                             draw_n, model, cores, 
-                             chunk, seed,
-                             continue, chain_last) {
+sample_posterior <- function() {
   # Purpose: samples from the posterior using parallelized demcmc transitios
-  # Input: integer scalars theta_n, init_n, chain_n, draw_n, cores, seed
-  # Output: numeric array posterior
+  # Input: global variables defined in a script
+  # Output: returns double array posterior_all, 
+  #          saves double matrix partial_res to disc
   # Note: theta_n + 1 contains likelihood calculations,
-  # theta_n + 2 contains acceptance indicator
+  #       theta_n + 2 contains acceptance indicator
   
-  progress_record <- paste0("results/fitting/progress-log-norm-fit", ".txt")
-  writeLines(text = "initialize chains", con = progress_record)
+  progress_record <- paste0("results/fitting/kr-progress-log-norm-fit", ".txt")
+  writeLines("initialize chains", progress_record)
   
-  set.seed(seed = seed)
-  registerDoParallel()
-  
-  if (continue == TRUE) {
-    history_n <- nrow(history_last)
-    init_idx <- seq_len(init_n)
-    posterior_all <- rbind(history_last,
-                           matrix(data = 0,
-                                  nrow = chain_n * draw_n,
-                                  ncol = theta_n + 1))
-    draw_last <- (history_n - init_n) / chain_n
-    save_points <- seq(draw_last + 5, draw_last + draw_n, 5)
-    for (draw in 2:draw) {
+  if (continue) {
+    set.seed(seed)
+    theta_idx <- -(theta_n + 1:2)
+    partial_n <- nrow(partial_res[!partial_res[, 1] == 0, ])
+    posterior_all <- partial_res
+    
+    save_points <- seq(5, draw_n + 5, 5)
+    for (draw in seq(partial_n + 1, draw_n)) {
+      chain_idx <- draw - 1
+      iter_idx <- seq_len(chain_idx)
+      
       timer <- proc.time()
-      posterior_all[draw_idx, ] <- update_chains(train_data, 
-                                                 posterior_all[seq_len(history_n), ],
-                                                 chain_n, theta_n,
-                                                 history_n, cores,
-                                                 chunk)
+      posterior_all[draw, ] <- update_chains()
       timer <- proc.time() - timer
-      cat(c(draw_idx, draw, "draws has been finished", timer["elapsed"]),
+      cat(paste("draw", draw, "time ", timer["elapsed"]),               
           file = progress_record,
           sep = "\n",
           append = TRUE)
-      if (any(draw == save_points)) {
-        partial_res <- posterior_all[-init_idx, ]
+      
+      if (draw %in% save_points) {        
+        partial_res[seq_len(draw), ] <- posterior_all[seq_len(draw), ]
         save(partial_res, 
-             file = "results/fitting/posterior-chains-norm-fit.RData")
+             file = "results/fitting/kr-posterior-chains-norm-fit.RData")
       }
     }
-  }
-  if (continue == FALSE) {
-    theta_idx <- -(theta_n + 1)
-    posterior_all <- array(data = 0, dim = c(draw_n, -theta_idx, chain_n))
-    posterior_all[1, theta_idx, ] <- t(initialize_chains(model, chain_n))
-    data_init <- apply(posterior_all[1, theta_idx, ], 2,
-                       combine_data, behav_data = train_data) %>% rbind_all
+    return(posterior_all)
+  } else {
+  
+    set.seed(seed)
+  
+    tune_constant_1 <- .001 ^ 2 / theta_n
+    tune_constant_2 <- 2.38 ^ 2 / theta_n
+    theta_idx <- -(theta_n + 1:2)
+    
+    posterior_all <- matrix(0, draw_n, theta_n + 2)
+    partial_res <- matrix(0, draw_n, theta_n + 2)
+  
+    posterior_all[1, theta_n + 2] <- tune_constant_2
+    posterior_all[1, theta_idx] <- sample_prior(model)
+    data_mat <- combine_data(posterior_all[1, theta_idx])
+      
     timer <- proc.time()
-    posterior_all[1, -theta_idx, ] <- 
-      joint_logdensity(data_init, t(posterior_all[1, theta_idx, ]),
-                       model, chain_n, cores, chunk)
+    posterior_all[1, theta_n + 1] <- 
+      integral$joint_logdensity_cpp(data_mat,
+                                    posterior_all[1, theta_idx],
+                                    model, thread_n, chunk_n,
+                                    tol, maxEvals)
     timer <- proc.time() - timer
-    cat(c("init has been finished", timer["elapsed"]),
+    
+    cat(paste("draw 1 time ", timer["elapsed"]),
         file = progress_record,
         sep = "\n", append = TRUE)
     
-    save_points <- seq(5, draw_n, 5)
-    for (draw in 2:draw_n) {
-      if (draw == 2) {
-        posterior_cur <- posterior_all[seq_len(draw - 1), , ] 
-        dim(posterior_cur) <- c(1, -theta_idx, chain_n)
-      } 
-      else  
-        posterior_cur <- posterior_all[seq_len(draw - 1), , ]
+    save_points <- seq(5, draw_n + 5, 5)
+    for (draw in seq(2, draw_n)) {
+      chain_idx <- draw - 1
+      iter_idx <- seq_len(chain_idx)
       
       timer <- proc.time()
-      posterior_all[draw, , ] <- update_chains(train_data, 
-                                               posterior_cur,
-                                               chain_n, theta_n,
-                                               cores, chunk)
+      posterior_all[draw, ] <- update_chains()
       timer <- proc.time() - timer
-      cat(c(draw, "draws has been finished", timer["elapsed"]),
+      cat(paste("draw", draw, "time ", timer["elapsed"]),               
           file = progress_record,
           sep = "\n",
           append = TRUE)
-      if (any(draw == save_points)) {
-        partial_res <- posterior_all[seq_len(draw), , ]
+      
+      if (draw %in% save_points) {        
+        partial_res[seq_len(draw), ] <- posterior_all[seq_len(draw), ]
         save(partial_res, 
-             file = "results/fitting/posterior-chains-norm-fit.RData")
+             file = "results/fitting/kr-posterior-chains-norm-fit.RData")
       }
     }
   }
-  #file.remove(progress_record)
-  return(posterior_all)
+  posterior_all
 }

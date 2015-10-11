@@ -9,13 +9,16 @@ settings <- list(models = c("independent", "normal", "t"),
                  seeds = c(1316048320, -1572737661, 195896225),
                  sigma = .1,
                  time_unit = 1e-3,
-                 cores = 2)
+                 cores = 1,
+                 group_n = 9)
 
 # Simulates paths for the three models
 timer <- proc.time()
 paths <- with(data = settings, 
               expr = mapply(FUN = simul_paths, model = models, seed = seeds, 
-                            MoreArgs = list(smpl_size, sigma, time_unit, cores), 
+                            MoreArgs = list(smpl_size, sigma, 
+                                            time_unit, cores,
+                                            group_n), 
                             SIMPLIFY = FALSE))
 timer <- proc.time() - timer
 

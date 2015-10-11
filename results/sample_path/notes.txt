@@ -1,0 +1,67 @@
+
+Results:
+
+[+ / -]
+
+1. Elliptical copulas change predictions of the independent copula, but are negligibly different themselves
+
+2. Correlation pattern matters; switching signs reverses direction of effects.
+
+3. Magnitudes matter; considerable effects arise with medium and large correlations
+
+4. Effects on sample paths can be summarized with starting points, rates of change and termination times.  
+
+4. Effect interact with instruction, brightness, response and speed.
+
+5. Effects are higher under "accuracy"
+
+6. Effects are higher for brighter stimuli
+
+7. Effects are higher for the stimulus inconsistent "dark" response
+
+8. Effects are highest for medium, intermediate for fastests, and turn smallest for slowest.
+
+9. The correlation is positive and its magnitude is 0.85. The mean bias, an average across speed levels, is 0.464. Under speed and near-neutral stimuli, fastest and intermediate bright responses are greater than the mean bias, but slowest is slightly less than the mean bias. Dark responses show a similar, almost reversed pattern of departures from the mean bias. Fastest and intermediate dark responses are less than the mean bias, while slowest dark responses are not different from the mean bias. For both responses, the fastest speed is obtained when responses are closest to their boundary, while intermediate and slowest responses arise from being farther from the boundary, sometimes crossing the mean bias line.
+
+Increasing brightness maintains the fastest bright response bias, reverses the intermediate bright response bias to less than the mean bias, and increases the bias of the slowest bright response. Similarly, when brightness is increased, the fastest and intermediate dark responses decrease further from the mean bias, and the slowest dark responses change from no difference in bias to a bias less than the mean bias. Basically, under conditions of high brightness, any response, besides the fastest bright response, has initial positions biased away from the mean bias towards the dark response.
+
+Changing instructions to accuracy causes a similar pattern of initial biases. When stimuli are near-neutral, bias in fastest bright responses are higher than the mean bias, but biases in intermediate and slowest bright responses are lower than the mean bias. Conversely, the fastest dark responses are biased below the mean bias, the intermediate dark responses show no difference from the mean bias and the slowest dark responses start above the mean bias. 
+
+Staying under the accuracy instruction, but increasing brightness enhances bias deviations for bright responses and partially reverses bias deviations for dark responses. Fastest bright responses show the same greater initial bias than the mean bias; intermediate and slowest bright responses show larger decreases from the mean bias. Alternatively, fastest dark responses increase in their departure from the mean bias towards the lower boundary, while intermediate and slowest dark responses no or positive bias deviation to negative bias deviation. As under speed condition, increasing brightness decreases initial bias for all the responses, but the fastest bright responses, towards the lower boundary.
+
+
+
+Organization:
+
+1. Note on estimate precision
+
+2. Figure organization
+
+3. Detailed descriptions at highest correlation fixing pattern, copula, instruction; each paragraph describes predicted discrepancies in a feature of paths on each side as a function of brightness, adjusted for speed and response.   
+
+Discussion:
+
+1. Correlation parameter can produce strong effects and may be important to model the decision process under general or special conditions.
+
+2. The paths bend depending on the correlation sign and magnitude. Conceptually, effect is a x ^ 3 function of the correlation domain, giving little effect around the middle and effects increasing in opposite directions with larger magnitudes. Positive correlation of bias and drift drags the starting points up for the "bright" responses, which are more likely under higher drift, and shifts starting points down for the "dark" responses, driven by smaller drift rates. "bright" responses tend to occupy upper half of the ellipse and "dark" responses are produced by parameter combinations sampled from the lower part of the ellipse.
+
+3. Interaction of correlation effect with other factors is more difficult to explain without further study, but these provide clear predictions of the model that could be checked by single cell recordings and maybe reaction times. By linking accumulation of evidence to brain cell electrical potential, the starting points and changes in rates of evidence accumulation could be measured directly. 
+
+4. The exact predicted values do not matter because people are not identical nor experimental conditions are sufficiently controlled. What matters is the information about the order of magnitude and qualitative pattern of effects revealed by the predictions. 
+
+5. The standard model is a special case of the normal copula model. Assuming the independent copula is equivalent to assuming 0 correlations for the normal copula. Under typical experimental conditions this is a reasonable assumption, but under conditions that induce correlations, the correlation parameters have to be free to vary to avoid a gross misfit.
+
+6. On the other hand, large shifts in termination times suggest correlated parameters will introduce shifts into the reaction times, especially small to moderate quantiles. These last predictions is what we can investigate in the second study.
+
+
+
+
+
+
+
+
+
+
+
+
+

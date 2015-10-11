@@ -1,4 +1,5 @@
 
+
 sample_behavior <- function(params, smpl_size, model, sigma = .1) {
   trial_param <- smpl_param(params = params,
                             smpl_size = smpl_size,
@@ -9,51 +10,54 @@ sample_behavior <- function(params, smpl_size, model, sigma = .1) {
                          beta = trial_param$beta,
                          delta = trial_param$delta, 
                          sigma = sigma)
-  return(behav_smpl)
+  behav_smpl
 }
 
 sample_experiment <- function(theta, model, prop, smpl_size) {
   
   prop_n <- length(prop)
-  instr <- c(0, 1)
+  instr <- c(1, 0)
+  theta[1:20] <- exp(theta[1:20])
+  
   
   exper_theta <- 
-    bind_rows(data.frame(alpha = theta[1], 
+    bind_rows(data_frame(alpha = theta[1], 
                          nu = weibull(bright = prop, lower = theta[2],             
-                                      upper = theta[3], shape = 9,
-                                      scale = .5),
-                         eta = theta[15],
-                         lambda = theta[6],
-                         gamma = theta[16],
-                         chi = theta[7],
-                         phi = theta[17]),
-              data.frame(alpha = theta[8], 
-                         nu = weibull(bright = prop, lower = theta[9],
-                                      upper = theta[10], shape = 14,
-                                      scale = .6),
-                         eta = theta[15],
-                         lambda = theta[13],
-                         gamma = theta[16],
-                         chi = theta[14],
-                         phi = theta[17]))
+                                      upper = theta[3], shape = theta[4],
+                                      scale = theta[5]),
+                         eta = theta[6],
+                         shape1 = theta[7],
+                         shape2 = theta[8],
+                         shape = theta[9],
+                         scale = theta[10]),
+              data_frame(alpha = theta[11], 
+                         nu = weibull(bright = prop, lower = theta[12],
+                                      upper = theta[13], shape = theta[14],
+                                      scale = theta[15]),
+                         eta = theta[16],
+                         shape1 = theta[17],
+                         shape2 = theta[18],
+                         shape = theta[19],
+                         scale = theta[20]))
   if (model == "normal") {
     exper_theta <- 
       bind_cols(exper_theta, 
-                data.frame(rho_db = rep(x = theta[18],                  
+                data_frame(rho_db = rep(x = theta[21],                  
                                         times = 2 * prop_n),
-                           rho_dt = rep(x = theta[19], 
+                           rho_dt = rep(x = theta[22], 
                                         times = 2 * prop_n),
-                           rho_bt = rep(x = theta[20], 
+                           rho_bt = rep(x = theta[23], 
                                         times = 2 * prop_n)))
   }
   
   behav_data <- apply(X = exper_theta, MARGIN = 1, FUN = sample_behavior,
                       smpl_size = smpl_size, model = model) %>% bind_rows
   colnames(behav_data) <- c("rt", "resp")
-  prop_data <- data.frame(prop = rep(x = prop, each = smpl_size) %>% rep(times = 2))
-  instr_data <- data.frame(instr = rep(x = c(0, 1), each = prop_n * smpl_size))
+  prop_data <- data_frame(prop = rep(x = prop, each = smpl_size) %>% rep(times = 2))
+  # 1 for accuracy, 0 speed
+  instr_data <- data_frame(instr = rep(x = instr, each = prop_n * smpl_size))
   data_mat <- bind_cols(behav_data, prop_data, instr_data)
-  return(data_mat)
+  data_mat
 }
 
 

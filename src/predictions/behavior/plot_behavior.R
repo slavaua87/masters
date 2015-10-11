@@ -4,14 +4,9 @@ plot_behavior_sum <- function(behavior_sum, rows = 3, cols = 2) {
   # Plots a grid of mean paths of 3 models for nrow * ncol conditions
   # Takes list of lists of numeric vectors, integer scalars and saves an image
   
-  library(package = "magrittr")
-  library(package = "dplyr")
-  library(package = "ggplot2")
-  library(package = "ggthemes")
-  
   behavior_sum %>% mutate(graph = cut(condition, 
-                                       breaks = 3,
-                                       labels = FALSE)) %>%
+                                      breaks = 3,
+                                      labels = FALSE)) %>%
     group_by(graph) %>% 
     mutate(subgraph = cut(condition, breaks = 6, labels = FALSE)) %>% 
     do({        
@@ -31,7 +26,7 @@ plot_behavior_sum <- function(behavior_sum, rows = 3, cols = 2) {
                     
         ggsave(qp_graph, 
                filename = paste0("results/behavior/qp-plot-corr",
-                                 unique(.$graph), "-", Sys.Date(), ".jpeg"))
+                                 unique(.$graph), "-", Sys.Date(), ".pdf"))
   })
 }
 

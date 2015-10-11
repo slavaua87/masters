@@ -1,0 +1,24 @@
+$models
+[1] "independent" "normal"      "t"          
+
+$smpl_size
+[1] 1e+05
+
+$sim_size
+[1] 1000
+
+$seeds
+[1]  1316048320 -1572737661   195896225
+
+$sigma
+[1] 0.1
+
+$time_unit
+[1] 0.001
+
+$cores
+[1] 50
+
+$group_n
+[1] 72
+

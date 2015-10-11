@@ -1,13 +1,13 @@
 
 # Sets the root directory and then uses relative paths
-setwd("~/Dropbox/Slava/Masters/")
-source("src/predictions/behavior/plot_behavior.R")
+setwd("~/Masters/")
+source("src/predictions/behavior/load_dependencies.R")
 behavior_sum <- 
-  read.table(file = "results/behavior/behavior-summary-2015-03-03.txt",
+  read.table(file = "results/behavior/behavior-summary-2015-05-12.txt",
              header = TRUE)
 
 # Specifies plotting settings
-settings <- list(rows = 6,
+settings <- list(rows = 3,
                  cols = 2)
 
 # Generates nplots .pdf images in the results directory for sample paths

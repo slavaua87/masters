@@ -1,7 +1,7 @@
 
 
-library(dplyr)
-library(magrittr)
+library("dplyr")
+library("magrittr")
 setwd("~/Dropbox/Slava/Masters/")
 source(file = "src/fitting/clean_contaminants.R")
 

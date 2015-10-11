@@ -1,53 +1,58 @@
 
 # root directory - all files are sourced based on relative paths
-setwd("~/Masters/")
+setwd("~/Dropbox/Slava/Masters/")
 
 # load dependencies
 source("src/fitting/load_dependencies.R")
 
+# catch errors
+# errors <- file("results/fitting/errors.Rout", open = "wt")
+# sink(file = errors, append = TRUE, type = "message")
+
 # load chains to use last state as initial state
-# load(file = "results/fitting/posterior-chains-test.RData")
-# chain_last <- res[, , dim(res)[3]]
+#load("results/fitting/posterior-chains-norm-fit.RData")
 
 # experimental settings
-model <- "normal"
-smpl_size <- 1
-prop <- seq(from = 1, to = 32, by = 7) / 32
+model <- c("independent", "normal")[2]
+smpl_size <- 1e1
+prop <- c(.3, .5, .7) #seq(from = 0, to = 32, by = 4) / 32
+initial <- TRUE
 
 # parameter sample from the prior
-set.seed(245186)
-theta <- initialize_chains(model = model, chain_n = 1) %>% as.numeric
+set.seed(245166)
+theta <- sample_prior(model)
 theta_n <- length(theta)
 
 # sample of data from the experiment
-train_data <- sample_experiment(theta = theta, model = model,
-                                prop = prop, smpl_size = smpl_size)
+train_data <- sample_experiment(theta, model,
+                                prop, smpl_size)
+initial <- TRUE
 
 # sampler settings
 settings <- list(train_data = train_data,
                  theta_n = theta_n,
-                 chain_n = 3, 
-                 draw_n = 10000,
+                 draw_n = 5,
                  model = model,
-                 cores = 60, 
-                 chunk = 1,
+                 alpha = .15,
+                 thread_n = 3, 
+                 chunk_n = 1,
+                 tol = 1e-3,
+                 maxEvals = 5e5,
                  seed = 1800968452,
-                 continue = FALSE,
-                 chain_last = NULL)
+                 continue = FALSE)
+
+# Saves machine/software/settings configuration for reproducibility
+capture.output(sessionInfo(),
+               file = paste0("results/fitting/machine-software-config-norm-fit-",
+                             Sys.Date(), ".txt"))
+capture.output(c(settings[-1], smpl_size = smpl_size, prop = list(prop)),
+               file = paste0("results/fitting/simulation-config-norm-fit-",
+                             Sys.Date(), ".txt"))
 
 # Obtains posterior sample for a model
+attach(settings, 2, warn.conflicts = FALSE)
 timer <- proc.time()
-res <- with(data = settings,
-            expr = sample_posterior(train_data = train_data,
-                                    theta_n = theta_n,
-                                    chain_n = chain_n, 
-                                    draw_n = draw_n,
-                                    model = model,
-                                    cores = cores,
-                                    chunk = chunk,
-                                    seed = seed,
-                                    continue = continue,
-                                    chain_last = chain_last))
+res <- sample_posterior()
 timer <- proc.time() - timer
 
 # Saves a array of posterior draws in plain text format
@@ -58,14 +63,5 @@ write.table(x = res,
 capture.output(timer, 
                file = paste0("results/fitting/computational-time-norm-fit-",
                              Sys.Date(), ".txt"))
-
-# Saves machine/software/settings configuration for reproducibility
-capture.output(sessionInfo(),
-               file = paste0("results/fitting/machine-software-config-norm-fit-",
-                             Sys.Date(), ".txt"))
-capture.output(settings[-1],
-               file = paste0("results/fitting/simulation-config-norm-fit-",
-                             Sys.Date(), ".txt"))
-
 
 
