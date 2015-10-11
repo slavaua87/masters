@@ -1,15 +1,15 @@
 unused/
 .dropbox
 .Rhistory
-docs/administrative/
-docs/notebook/
-docs/plans/
-docs/presentations/
-docs/manuscript/final
-docs/manuscript/formated
-docs/manuscript/proposal
-docs/manuscript/submitted
-results/
+docs/administrative/*
+docs/notebook/*
+docs/plans/*
+docs/presentations/*
+docs/manuscript/final/*
+docs/manuscript/formated/*
+docs/manuscript/proposal/*
+docs/manuscript/submitted/*
+results/*
 
 
 
