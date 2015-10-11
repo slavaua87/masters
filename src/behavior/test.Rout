@@ -1,0 +1,3 @@
+Error in log("a") : non-numeric argument to mathematical function
+Error in close.connection("test.Rout") : 'con' is not a connection
+Error in log("a") : non-numeric argument to mathematical function

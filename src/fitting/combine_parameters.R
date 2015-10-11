@@ -1,5 +1,4 @@
 
-### Combines bounded wiener process parameters into a single data.frame
 combine_nu_wiener <- function(nu, wiener) {
   # Combines drifts to other wiener process parameters
   # Takes 2 data.frames and returns a matrix

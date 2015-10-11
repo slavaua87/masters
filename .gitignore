@@ -1,6 +1,17 @@
 unused/
 .dropbox
 .Rhistory
-progress_log.txt
-docs/
+docs/administrative/
+docs/notebook/
+docs/plans/
+docs/presentations/
+docs/manuscript/final
+docs/manuscript/formated
+docs/manuscript/proposal
+docs/manuscript/submitted
+results/
+results/
+
+
+
 

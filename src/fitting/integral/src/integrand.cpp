@@ -5,6 +5,9 @@ using namespace arma;
 using namespace std;
 
 vec forwsub_c(mat A, vec b) {
+  // Purpose: solves linear system with forward substitution algorithm
+  //          and used for evaluation of multivariate normal density
+  
   vec x = zeros(3);
   for (int i = 0; i < 3; ++i) {
     x[i] = (b[i] - as_scalar(A.row(i) * x)) / A(i, i);
@@ -13,6 +16,8 @@ vec forwsub_c(mat A, vec b) {
 }
 
 double normal_logcopula_c(vec cop_value, mat sqrt_rho) {
+  // Purpose: evaluates normal copula log-density function
+  
   vec x(3), marginals(3);
   unsigned i;
   
@@ -23,7 +28,6 @@ double normal_logcopula_c(vec cop_value, mat sqrt_rho) {
   uvec test = marginals == 0.0;
   if (any(test)) {
     marginals.elem(find(test)).fill(DBL_EPSILON);
-  //numeric_limits<double>::min()
   }
   vec sqrt_rho_x = forwsub_c(trans(sqrt_rho), x);
   vec rho_x = sum(pow(sqrt_rho_x, 2));
@@ -42,13 +46,8 @@ double calc_logdensity_c(double delta, double beta, double t_nd,
                          double nu, double eta, double shape1, double shape2,
                          double shape, double scale, mat sqrt_rho,
                          string model) {
-//  # Calculates probability density for independent and normal
-//  # Input is a numeric scalars delta, beta, t_nd, 
-//  # numeric data.frame params, character scalar model
-//  # Output is a numeric scalar dens
-//  # Notes: params vector has the following order - 1:alpha, 2:nu, 3:eta,
-//  # 4:lambda, 5:gamma, 6:chi, 7:phi, 8:rho_db, 9:rho_dt, 10:rho_bt, 11:omega
-
+  // Purpose: evaluates log-density of Wiener parameters
+  
   vec marginal_dens(3);
   marginal_dens[0] = R::dnorm(delta, nu, eta, false);
   marginal_dens[1] = R::dbeta(beta, shape1, shape2, false);
@@ -90,6 +89,8 @@ double calc_logdensity_c(double delta, double beta, double t_nd,
 
 double dwiener_cpp(double q, double alpha, double tau,
                    double beta, double delta, double choice) {
+  // Purpose: evaluates joint density of response time and response
+  
   double kl, ks, ans;
   int k,K;
   double err = 1e-6;
@@ -100,50 +101,38 @@ double dwiener_cpp(double q, double alpha, double tau,
     delta = -delta;
   }
   
-  q = q - tau; // remove non-decision time from q
-  q = q / pow(alpha, 2); // convert t to normalized time tt
+  q = q - tau; 
+  q = q / pow(alpha, 2); 
 
-  // calculate number of terms needed for large t
-  if (M_PI * q * err < 1) { // if error threshold is set low enough
-      kl = sqrt(-2 * log(M_PI * q * err) / (pow(M_PI, 2) * q)); // bound
-      kl = kl > 1 / (M_PI * sqrt(q)) ? kl : 1 / (M_PI * sqrt(q)); // ensure boundary conditions met
+  if (M_PI * q * err < 1) { 
+      kl = sqrt(-2 * log(M_PI * q * err) / (pow(M_PI, 2) * q));
+      kl = kl > 1 / (M_PI * sqrt(q)) ? kl : 1 / (M_PI * sqrt(q)); 
   }
-  else { // if error threshold set too high
-      kl = 1 / (M_PI * sqrt(q)); // set to boundary condition
+  else { 
+      kl = 1 / (M_PI * sqrt(q)); 
   }
-
-  // calculate number of terms needed for small t
-  if ((2 * sqrt(2 * M_PI * q) * err) < 1) { // if error threshold is set low enough
-      ks = 2 + sqrt(-2 * q * log(2 * sqrt(2 * M_PI * q) * err)); // bound
-      ks = ks > sqrt(q) + 1 ? ks : sqrt(q) + 1; // ensure boundary conditions are met
+  if ((2 * sqrt(2 * M_PI * q) * err) < 1) {
+      ks = 2 + sqrt(-2 * q * log(2 * sqrt(2 * M_PI * q) * err)); 
+      ks = ks > sqrt(q) + 1 ? ks : sqrt(q) + 1; 
   }
-  else { // if error threshold was set too high
-      ks = 2; // minimal kappa for that case
+  else { 
+      ks = 2; 
   }
-
-  // compute density: f(tt|0,1,beta)
-  ans = 0; //initialize density
-  if (ks < kl) { // if small t is better (i.e., lambda<0)
-      K = ceil(ks); // round to smallest integer meeting error
-      for (k = -floor((K - 1) / 2); k <= ceil((K - 1) / 2); k++) { // loop over k
-          ans = ans + (beta + 2 * k) * exp(-(pow((beta + 2 * k), 2)) / 2 / q); // increment sum
-      }
-     // ans = log(ans) - 0.5 * (log(2) + log(M_PI) + log(pow(q, 3))); // add constant term
-      ans = ans / sqrt(2 * M_PI * pow(q, 3));
+  ans = 0; 
+  if (ks < kl) { 
+      K = ceil(ks); 
+      for (k = -floor((K - 1) / 2); k <= ceil((K - 1) / 2); k++) {
+        ans = ans + (beta + 2 * k) * exp(-(pow((beta + 2 * k), 2)) / 2 / q);      }
+        ans = ans / sqrt(2 * M_PI * pow(q, 3));
   }
-  else { // if large t is better...
-      K = ceil(kl); // round to smallest integer meeting error
+  else { 
+      K = ceil(kl); 
       for (k = 1; k <= K; k++) {
           ans = ans + k * exp(-(pow(k, 2)) * (pow(M_PI, 2)) * q / 2) * 
-            sin(k * M_PI * beta); // increment sum
+            sin(k * M_PI * beta); 
       }
-      //ans = log(ans) + log(M_PI); // add constant term
       ans = ans * M_PI;
   }
-
-// convert to f(t|v,a,w) and return result
-//  ans = log(ans + ((-delta * alpha * beta -(pow(delta, 2)) *
-//        (q * pow(alpha, 2)) / 2) - log(pow(alpha,2))));
   ans = ans * exp(-delta * alpha * beta - (pow(delta, 2)) * 
     (q * pow(alpha, 2)) / 2) / (pow(alpha, 2));
   if (ans < numeric_limits<double>::min() || ans == datum::inf || isnan(ans)) {
@@ -156,15 +145,9 @@ double calc_density_integrand_c(const double * x, double rt, double choice,
                                 double sigma, double alpha, double nu,
                                 double eta, double shape1, double shape2, 
                                 double shape, double scale, mat sqrt_rho,
-                                string model) {
-//  # Purpose: Calculates integrand for a rt density for a given a 
-//  # choice and model
-//  # Input: numeric vector dimensions, numeric scalars rt, choice, sigma
-//  # numeric vector params, character scalar model
-//  # Output: numeric scalar integrand
-//  # Notes: params vector has the following order - 1:alpha, 2:nu, 3:eta,
-//  # 4:lambda, 5:gamma, 6:chi, 8:phi, 9:rho_db, 10:rho_dt, 11:rho_bt, 12:omega
-  
+                                string model) {  
+  // Purpose: evalutes integrand which is a product of 
+  //          data and parameter densities
   
   double delta_trans = *x;
   double beta = *(x + 1);

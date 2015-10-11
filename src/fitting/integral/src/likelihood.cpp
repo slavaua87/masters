@@ -25,6 +25,8 @@ struct params {
 };
 
 double calc_prior_cpp(vec theta, string model, double omega = 1) {
+  // Purpose: evaluates prior density of unknown parameters
+  
   double prior_density = 0;
   unsigned i;
   for (i = 0; i < 20; ++i) 
@@ -38,6 +40,7 @@ double calc_prior_cpp(vec theta, string model, double omega = 1) {
 
 int fwrap_v(unsigned ndim, size_t npts, const double * x, void * fdata,         
             unsigned fdim, double * fval) {
+  // Purpose: wraps integrand to fit with hcubature algorithm
 
   params mydata = *((params *) fdata);
   vec res(fval, npts, false);
@@ -70,7 +73,9 @@ double integrate_density( double rt,  double choice,  double sigma,
                           double shape1,  double shape2,  double shape,
                           double scale,  mat sqrt_rho,  string model,
                           double tol,  size_t maxEval) {
- 
+  // Purpose: calculates tripple integral of behavioral density
+  //          with respect to density of parameters
+  
   double integral;
   double error;
   unsigned counts;
@@ -105,13 +110,15 @@ double integrate_density( double rt,  double choice,  double sigma,
     hcubature_v(1, fwrap_v, &mydata, 3, xmin, xmax,
                 maxEval, 0, tol, ERROR_L1, integral_pt, error_pt);
     tol *= 0.1;
-  } while (counts < 2e3);
+  } while (counts < 2e3 || tol < 1e-7);
   
   return integral;
 }
 
 vec calc_likelihood_cpp(mat data_mat, string model, size_t thread_n,
                         size_t chunk_n, double tol, size_t maxEvals) {
+  // Purpose: evalutes likelihood function of response times and responses
+  
   mat sqrt_rho;
   if (model == "normal") {
     double rho_db = data_mat(0, 9);
@@ -151,13 +158,15 @@ vec calc_likelihood_cpp(mat data_mat, string model, size_t thread_n,
 
   uvec zero_test = behav_density <= 0;
   if (any(zero_test))
-    behav_density.elem(find(zero_test)).fill(numeric_limits<double>::min());
+    behav_density.elem(find(zero_test)).fill(DBL_EPSILON);
   return behav_density; 
 }
 
 double joint_logdensity_cpp(mat data_mat, vec theta_prop, string model,
                             unsigned thread_n, unsigned chunk_n, 
                             double tol, unsigned maxEvals) {
+  // Purpose: evalutes joint density of behavior and parameters
+  
   double logprior = calc_prior_cpp(theta_prop, model);
   vec likelihood = calc_likelihood_cpp(data_mat, model, thread_n,
                                        chunk_n, tol, maxEvals);
@@ -174,10 +183,7 @@ double joint_logdensity_cpp(mat data_mat, vec theta_prop, string model,
 RCPP_MODULE(integral) {
   Rcpp::function("joint_logdensity_cpp",
                  &joint_logdensity_cpp,
-                 "calculates joint log copula density");
-  Rcpp::function("calc_likelihood_cpp",
-                 &calc_likelihood_cpp,
-                 "calculates likelihood");
+                 "calculates joint density");
 }
 
 

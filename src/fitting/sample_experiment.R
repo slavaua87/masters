@@ -1,6 +1,11 @@
 
 
 sample_behavior <- function(params, smpl_size, model, sigma = .1) {
+  # Purpose: samples response times and responses
+  # Inputs: double vector params, integer scalar smpl_size,
+  #         character scalar model, double scalar sigma
+  # Output: double matrix behav_smpl
+  
   trial_param <- smpl_param(params = params,
                             smpl_size = smpl_size,
                             model = model)
@@ -14,11 +19,14 @@ sample_behavior <- function(params, smpl_size, model, sigma = .1) {
 }
 
 sample_experiment <- function(theta, model, prop, smpl_size) {
+  # Purpose: samples data from a brightness discrimination task
+  # Inputs: double vector theta, character scalar model,
+  #         double vector prop, integer scalar smpl_size
+  # Output: data_matrix data_mat
   
   prop_n <- length(prop)
   instr <- c(1, 0)
   theta[1:20] <- exp(theta[1:20])
-  
   
   exper_theta <- 
     bind_rows(data_frame(alpha = theta[1], 
@@ -53,9 +61,10 @@ sample_experiment <- function(theta, model, prop, smpl_size) {
   behav_data <- apply(X = exper_theta, MARGIN = 1, FUN = sample_behavior,
                       smpl_size = smpl_size, model = model) %>% bind_rows
   colnames(behav_data) <- c("rt", "resp")
-  prop_data <- data_frame(prop = rep(x = prop, each = smpl_size) %>% rep(times = 2))
+  prop_data <- data_frame(prop = rep(prop, each = smpl_size) %>%
+                            rep(times = 2))
   # 1 for accuracy, 0 speed
-  instr_data <- data_frame(instr = rep(x = instr, each = prop_n * smpl_size))
+  instr_data <- data_frame(instr = rep(instr, each = prop_n * smpl_size))
   data_mat <- bind_cols(behav_data, prop_data, instr_data)
   data_mat
 }

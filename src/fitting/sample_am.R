@@ -2,9 +2,11 @@
 
 sample_am <- function() {
   # Purpose: proposal mechanism according to adaptive metropolis
-  # Input: integer vectors chain_idx, theta_idx, numeric matrix posterior_all,
-  # numeric scalar tune_constant
-  # Output: numeric vector theta_new
+  # Inputs: integer vectors chain_idx, theta_idx, 
+  #         double matrix posterior_all,
+  #         double scalar tune_constant (all global)
+  # Output: double vector c(theta_reflected, 1) or 
+  #         double vector c(theta_old, 1)
   e1 <- parent.frame(1)
   e2 <- parent.frame(2)
   

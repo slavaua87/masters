@@ -1,6 +1,6 @@
 
 # root directory - all files are sourced based on relative paths
-setwd("~/Dropbox/Slava/Masters/")
+setwd("~/Masters/")
 
 # load dependencies
 source("src/fitting/load_dependencies.R")
@@ -14,8 +14,8 @@ source("src/fitting/load_dependencies.R")
 
 # experimental settings
 model <- c("independent", "normal")[2]
-smpl_size <- 1e1
-prop <- c(.3, .5, .7) #seq(from = 0, to = 32, by = 4) / 32
+smpl_size <- 1e4
+prop <- c(.5) #seq(from = 0, to = 32, by = 4) / 32
 initial <- TRUE
 
 # parameter sample from the prior
@@ -31,15 +31,14 @@ initial <- TRUE
 # sampler settings
 settings <- list(train_data = train_data,
                  theta_n = theta_n,
-                 draw_n = 5,
+                 draw_n = 1e5,
                  model = model,
-                 alpha = .15,
-                 thread_n = 3, 
+                 alpha = .10,
+                 thread_n = 60, 
                  chunk_n = 1,
                  tol = 1e-3,
                  maxEvals = 5e5,
-                 seed = 1800968452,
-                 continue = FALSE)
+                 seed = 1800968452)
 
 # Saves machine/software/settings configuration for reproducibility
 capture.output(sessionInfo(),

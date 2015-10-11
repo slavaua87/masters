@@ -8,7 +8,7 @@ sample_posterior <- function() {
   # Note: theta_n + 1 contains likelihood calculations,
   #       theta_n + 2 contains acceptance indicator
   
-  progress_record <- paste0("results/fitting/kr-progress-log-norm-fit", ".txt")
+  progress_record <- paste0("results/fitting/jf-progress-log-norm-fit", ".txt")
   writeLines("initialize chains", progress_record)
   
   if (continue) {
@@ -33,7 +33,7 @@ sample_posterior <- function() {
       if (draw %in% save_points) {        
         partial_res[seq_len(draw), ] <- posterior_all[seq_len(draw), ]
         save(partial_res, 
-             file = "results/fitting/kr-posterior-chains-norm-fit.RData")
+             file = "results/fitting/jf-posterior-chains-norm-fit.RData")
       }
     }
     return(posterior_all)
@@ -80,7 +80,7 @@ sample_posterior <- function() {
       if (draw %in% save_points) {        
         partial_res[seq_len(draw), ] <- posterior_all[seq_len(draw), ]
         save(partial_res, 
-             file = "results/fitting/kr-posterior-chains-norm-fit.RData")
+             file = "results/fitting/jf-posterior-chains-norm-fit.RData")
       }
     }
   }

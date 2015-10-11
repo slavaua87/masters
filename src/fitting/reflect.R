@@ -2,8 +2,9 @@
 
 reflect <- function(theta_new) {
   # Purpose: checks that a MCMC proposal falls into the posterior support
-  # Input: numerical vector theta_new, character scalar model
-  # Output: logical scalar
+  #          and reflects it back if not
+  # Input: double vector theta_new, character scalar model (global)
+  # Output: double vector theta_new
   
   if (model == "independent")
     return(theta_new)
