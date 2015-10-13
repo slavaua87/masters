@@ -1,0 +1,22 @@
+Package: integral
+Maintainer: Slava Nikitin <slavaua87@gmail.com>
+Title: Elliptical Copula Diffusion Model
+LinkingTo: Rcpp, RcppArmadillo
+Type: Package
+URL: https://github.com/slavaua87/masters
+LazyLoad: yes
+Authors@R: c(person("Slava", "Nikitin", email = "slavaua87@gmail.com",
+    role = c("aut", "cre")), person("Steven",
+    "Johnson", role = c("aut", "cph"), comment = "C code for the cubature
+    library"))
+License: GPL-3
+Description: Calculates the joint posterior density of Wiener diffusion models with various parameter distributions
+SystemRequirements: GNU make
+Version: 1.0.0
+VignetteBuilder: knitr
+Imports:
+    Rcpp
+Suggests:
+    knitr
+RcppModules: integral
+Encoding: UTF-8
