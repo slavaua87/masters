@@ -9,7 +9,7 @@ bright_spd <- data.frame(prop = c(.512, .527, .547, .570, .605, .740))
 
 bright_acc <- data.frame(prop = c(.503, .515, .530, .545, .565, .590))
 
-# drift rate (reflects effect of s/a and brightness)
+# drift rate (reflects effect of instruction and brightness)
 nu <- as.data.frame(t(data.frame(
   acc = as.vector(weibull(bright_acc, 
                           weibull_param["acc", "lower"],
@@ -23,7 +23,7 @@ nu <- as.data.frame(t(data.frame(
                           weibull_param["spd", "shape"])))))
 colnames(nu) <- paste("prop", as.character(1:6), sep = "")
 
-# wiener process (reflects effect of s/a)
+# wiener process (reflects effect of instruction)
 wiener <- data.frame(alpha = c(.221, .05), eta = c(.127, .127),
                      lambda = c(.464, .464), gamma = c(.065, .065),
                      chi = c(.279, .279), phi = c(.041, .041), 
