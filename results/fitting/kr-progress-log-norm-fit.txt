@@ -1,5 +1,0 @@
-initialize chains
-draw 18061 time  8.69
-draw 18062 time  7.228
-draw 18063 time  7.099
-draw 18064 time  7.275
