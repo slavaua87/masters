@@ -1,15 +1,11 @@
 .dropbox
 .Rhistory
-unused/
-docs/administrative/
-docs/notebook/
-docs/plans/
-docs/presentations/
-docs/manuscript/final/
-docs/manuscript/formated/
-docs/manuscript/proposal/
-docs/manuscript/submitted/
-results/
+/unused
+/docs/*
+!/docs/main.pdf
+/results
+/src/fitting/diagnose2.R
+/src/fitting/integral_1.0.0.tar.gz
 
 
 

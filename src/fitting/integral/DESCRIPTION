@@ -3,7 +3,7 @@ Maintainer: Slava Nikitin <slavaua87@gmail.com>
 Title: Elliptical Copula Diffusion Model
 LinkingTo: Rcpp, RcppArmadillo
 Type: Package
-URL: https://github.com/slavaua87/
+URL: https://github.com/slavaua87/masters
 LazyLoad: yes
 Authors@R: c(person("Slava", "Nikitin", email = "slavaua87@gmail.com",
     role = c("aut", "cre")), person("Steven",

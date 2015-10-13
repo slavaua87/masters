@@ -2,7 +2,7 @@
 
 combine_data <- function(theta) {
   # Purpose: forms a data matrix with observations and parameters
-  # Input: data_frame train_data, double vector theta
+  # Inputs: data_frame train_data, double vector theta
   # Output: data_frame dat_mat
   
   theta[c(1, 4:11, 14:20)] <- exp(theta[c(1, 4:11, 14:20)])

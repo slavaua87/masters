@@ -2,7 +2,7 @@
 
 sample_posterior <- function() {
   # Purpose: samples from the posterior using parallelized demcmc transitios
-  # Input: global variables defined in a script
+  # Inputs: global variables defined in a script
   # Output: returns double array posterior_all, 
   #          saves double matrix partial_res to disc
   # Note: theta_n + 1 contains likelihood calculations,

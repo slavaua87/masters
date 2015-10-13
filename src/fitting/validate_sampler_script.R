@@ -6,8 +6,8 @@ setwd("~/Masters/")
 source("src/fitting/load_dependencies.R")
 
 # catch errors
-# errors <- file("results/fitting/errors.Rout", open = "wt")
-# sink(file = errors, append = TRUE, type = "message")
+errors <- file("results/fitting/errors.Rout", open = "wt")
+sink(file = errors, append = TRUE, type = "message")
 
 # load chains to use last state as initial state
 #load("results/fitting/posterior-chains-norm-fit.RData")

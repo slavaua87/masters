@@ -1,0 +1,13 @@
+.dropbox
+.Rhistory
+/unused
+/docs/*
+!/docs/main.pdf
+/results
+/src/fitting/diagnose2.R
+/src/fitting/integral_1.0.0.tar.gz
+
+
+
+
+

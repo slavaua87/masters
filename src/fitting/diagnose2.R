@@ -2,21 +2,24 @@
 
 
 res <- function(partial_res) {
+  # Purpose: map sampled parameter from sampling to model space
+  # Inputs: double matrix partial_res
+  # Output: double matrix partial_res
   partial_res <- cbind(exp(partial_res[, 1:20]), partial_res[, 21:25])
   partial_trans <- partial_res
   partial_res[, 7] <- partial_trans[, 7] / (partial_trans[, 7] + partial_trans[, 8])
   partial_res[, 17] <- partial_trans[, 17] / (partial_trans[, 17] + partial_trans[, 18])
-  partial_res[, 8] <- sqrt(partial_trans[, 7] * partial_trans[, 8] / 
-                      (partial_trans[, 7] + partial_trans[, 8]) ^ 2 / 
+  partial_res[, 8] <- sqrt(partial_trans[, 7] * partial_trans[, 8] /
+                      (partial_trans[, 7] + partial_trans[, 8]) ^ 2 /
                       (partial_trans[, 7] + partial_trans[, 8] + 1))
-  partial_res[, 18] <- sqrt(partial_trans[, 17] * partial_trans[, 18] / 
-                       (partial_trans[, 17] + partial_trans[, 18]) ^ 2 / 
+  partial_res[, 18] <- sqrt(partial_trans[, 17] * partial_trans[, 18] /
+                       (partial_trans[, 17] + partial_trans[, 18]) ^ 2 /
                        (partial_trans[, 17] + partial_trans[, 18] + 1))
   partial_res[, 9] <- partial_trans[, 9] * partial_trans[, 10]
   partial_res[, 10] <- sqrt(partial_trans[, 9]) * partial_trans[, 10]
   partial_res[, 19] <- partial_trans[, 19] * partial_trans[, 20]
   partial_res[, 20] <- sqrt(partial_trans[, 19]) * partial_trans[, 20]
-  partial_res  
+  partial_res
 }
 
 th2 <- res(rbind(c(theta, 1:2), c(theta, 1:2)))[1, 1:23]
@@ -44,7 +47,7 @@ lattice::xyplot(chains_all[, 1:6])
 lattice::xyplot(chains_all[, 7:12])
 lattice::xyplot(chains_all[, 13:18])
 lattice::xyplot(chains_all[, 19:23])
-lattice::xyplot(chains_all[, 24]) 
+lattice::xyplot(chains_all[, 24])
 lattice::xyplot(chains_all[, 25])
 
 
@@ -88,7 +91,7 @@ summary(chains_all)
 
 
 library("ggmcmc")
-chains_ggs <- ggs(chains_all[, 21:23]) 
+chains_ggs <- ggs(chains_all[, 21:23])
 ggs_compare_partial(chains_ggs) + theme_solarized_2(light = T)
 ggmcmc(chains_ggs, plot = c("density", "running", "caterpillar"))
 ci(chains_ggs)

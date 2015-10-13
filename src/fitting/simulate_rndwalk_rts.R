@@ -2,7 +2,7 @@
 rwiener_num <- function(alpha, tau, beta, delta) {
   # Purpose: converts data.frame output of rwiener into a matrix to enable
   #          vectorization
-  # Input: integer scalar n, numeric scalars alpha, tau, beta, delta
+  # Inputs: integer scalar n, numeric scalars alpha, tau, beta, delta
   # Output: numeric matrix rt_r
   
   repeat {
@@ -22,7 +22,7 @@ rwiener_vec <- Vectorize(FUN = rwiener_num,
 
 smpl_rts <- function(alpha, tau, beta, delta, sigma) {
   # Purpose: rescales parameters and cleans up the reaction time/choice sample
-  # Input: integer scalar n, double scalars alpha, tau,
+  # Inputs: integer scalar n, double scalars alpha, tau,
   #        beta, delta, sigma
   # Output: numeric data_frame rt_r with row and column names
   
